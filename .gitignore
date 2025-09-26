@@ -1,9 +1,11 @@
 *.knit.md
 *.utf8.md
+*.log
 /_freeze/
 /.quarto/
 /.venv/
 /*_cache/
 /cache/
+countdown.xlsx
 
-PyWhatKit*
+**/*.quarto_ipynb

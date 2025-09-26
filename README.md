@@ -7,9 +7,9 @@
 
 ## Overview
 
-This repository contains some tests of the [`pynetlogo`](https://pynetlogo.readthedocs.io) Python package, which provides an interface to control [NetLogo](https://ccl.northwestern.edu/netlogo/) from Python.
+This repository contains reproductions of examples from the [`pynetlogo`](https://pynetlogo.readthedocs.io) Python package, which provides an interface for controlling [NetLogo](https://www.netlogo.org) from Python. These examples are available in the [package documentation](https://pynetlogo.readthedocs.io).
 
-You can find the tests in the `index.qmd` [Quarto](https://quarto.org/) notebook file.
+You can find the code in the `index.qmd` [Quarto](https://quarto.org/) notebook file.
 
 ## License
 
