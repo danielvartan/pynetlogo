@@ -1,0 +1,9 @@
+*.knit.md
+*.utf8.md
+/_freeze/
+/.quarto/
+/.venv/
+/*_cache/
+/cache/
+
+PyWhatKit*

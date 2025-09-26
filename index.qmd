@@ -1,0 +1,58 @@
+---
+eval: false
+---
+
+# pynetlogo
+
+## Overview
+
+This document contains some tests of the [`pynetlogo`](https://pynetlogo.readthedocs.io) Python package, which provides an interface to control [NetLogo](https://ccl.northwestern.edu/netlogo/) from Python.
+
+## Installation
+
+You can install `pynetlogo` using pip:
+
+```
+# python -m venv .venv
+# source .venv/bin/activate
+```
+
+```bash
+pip install pynetlogo
+```
+
+## Tests
+
+These tests can be found in the [package documentation](https://pynetlogo.readthedocs.io) website.
+
+### Example 1
+
+```{python}
+%matplotlib inline
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+```{python}
+sns.set_style("white")
+sns.set_context("talk")
+```
+
+```{python}
+import pynetlogo
+
+netlogo = pynetlogo.NetLogoLink(
+    gui = True,
+    thd = False,
+    netlogo_home = "/opt/netlogo-7-0-0",
+    jvm_path = "/opt/netlogo-7-0-0/lib/runtime/lib/libjli.so"
+)
+```
+
+
+```{python}
+netlogo.load_model("./models/Wolf Sheep Predation_v6.nlogo")
+netlogo.command("setup")
+```
