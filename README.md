@@ -9,7 +9,7 @@
 
 This repository contains reproductions of examples from the [`pynetlogo`](https://pynetlogo.readthedocs.io) Python package, which provides an interface for controlling [NetLogo](https://www.netlogo.org) from Python. These examples are available in the [package documentation](https://pynetlogo.readthedocs.io).
 
-A few minor adjustments were necessary to run the original code with NetLogo 7. Fortunately, @quaquel, the creator of `pynetlogo`, provided [help](https://github.com/quaquel/pyNetLogo/issues/90) along the way.
+A few minor adjustments were necessary to run the original code with NetLogo 7. Fortunately, [Jan Kwakke](https://github.com/quaquel), the creator of `pynetlogo`, provided [help](https://github.com/quaquel/pyNetLogo/issues/90) along the way.
 
 You can find the code in the `index.qmd` [Quarto](https://quarto.org/) notebook file.
 
