@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Daniel Vartanian">
-<meta name="dcterms.date" content="2025-09-26">
+<meta name="dcterms.date" content="2025-09-27">
 
 <title>pynetlogo</title>
 <style>
@@ -164,6 +164,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#running-the-experiments-in-parallel-using-a-process-pool" id="toc-running-the-experiments-in-parallel-using-a-process-pool" class="nav-link" data-scroll-target="#running-the-experiments-in-parallel-using-a-process-pool">Running the Experiments in Parallel Using a Process Pool</a></li>
   </ul></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session Info</a></li>
   <li><a href="#license" id="toc-license" class="nav-link" data-scroll-target="#license">License</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/danielvartan/pynetlogo/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/danielvartan/pynetlogo/blob/main/index.qmd" class="toc-action"><i class="bi empty"></i>View source</a></li><li><a href="https://github.com/danielvartan/pynetlogo/issues/" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -190,7 +191,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">September 26, 2025</p>
+      <p class="date">September 27, 2025</p>
     </div>
   </div>
   
@@ -206,7 +207,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="https://www.repostatus.org/#inactive"><img src="https://www.repostatus.org/badges/latest/inactive.svg" class="img-fluid" alt="Project Status: Inactive – The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows."></a> <a href="http://creativecommons.org/publicdomain/zero/1.0/"><img src="https://img.shields.io/badge/license-CC0_1.0-lightgrey.svg" class="img-fluid" alt="License: CC0-1.0"></a> <!-- badges: end --></p>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>This document reproduces the examples of the <a href="https://pynetlogo.readthedocs.io"><code>pynetlogo</code></a> Python package, which provides an interface to control <a href="https://ccl.northwestern.edu/netlogo/">NetLogo</a> from Python. These examples are available in the <a href="https://pynetlogo.readthedocs.io">package documentation</a>.</p>
+<p>This document reproduces the examples of the <a href="https://pynetlogo.readthedocs.io"><code>pynetlogo</code></a> Python package, which provides an interface to control <a href="https://www.netlogo.org">NetLogo</a> from Python. These examples are available in the <a href="https://pynetlogo.readthedocs.io">package documentation</a>.</p>
 </section>
 <section id="installation" class="level2">
 <h2 class="anchored" data-anchor-id="installation">Installation</h2>
@@ -222,7 +223,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install openpyxl</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install pyyaml</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install SALib</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install sobol</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install session_info</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install sobol</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You will also need to ensure that the path to Java Virtual Machine (<a href="https://www.java.com/en/download/">JVM</a>) is properly configured in the <code>JAVA_HOME</code> environment variable. You can set this variable in your shell configuration file (e.g., <code>.bashrc</code>):</p>
 <p>For Arch Linux, use:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">JAVA_HOME</span><span class="op">=</span><span class="st">"/usr/lib/jvm/default"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -239,18 +241,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div id="7415b8b2" class="cell" data-execution_count="1">
+<div id="example-1-first-block" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="fc3a3159" class="cell" data-execution_count="2">
+<div id="250ce233" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">"white"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sns.set_context(<span class="st">"talk"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="5246b1d8" class="cell" data-execution_count="3">
+<div id="69462ded" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pynetlogo</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>netlogo <span class="op">=</span> pynetlogo.NetLogoLink(</span>
@@ -271,15 +273,15 @@ WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
 SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-Sep 26, 2025 2:00:38 AM com.sun.javafx.application.PlatformImpl startup
+Sep 27, 2025 12:22:06 AM com.sun.javafx.application.PlatformImpl startup
 WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed module @5d5d9e5'</code></pre>
 </div>
 </div>
-<div id="36ddceff" class="cell" data-execution_count="4">
+<div id="a359fe15" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>netlogo.load_model(<span class="st">"./nlogox/Wolf Sheep Predation_v6.nlogox"</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>netlogo.command(<span class="st">"setup"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="663c21e0" class="cell" data-execution_count="5">
+<div id="1f523a10" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>agent_xy <span class="op">=</span> pd.read_excel(<span class="st">"./data/xy_DataFrame.xlsx"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>agent_xy[[<span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span>]].head(<span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
@@ -332,14 +334,14 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 </div>
 </div>
 </div>
-<div id="f6bb4b70" class="cell" data-execution_count="6">
+<div id="8b186c7b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>netlogo.write_NetLogo_attriblist(agent_xy[[<span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span>]], <span class="st">"a-sheep"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="ac0045a3" class="cell" data-execution_count="7">
+<div id="33de3d05" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> netlogo.report(<span class="st">"map [s -&gt; [xcor] of s] sort sheep"</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> netlogo.report(<span class="st">"map [s -&gt; [ycor] of s] sort sheep"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="dabbff42" class="cell" data-execution_count="8">
+<div id="5dac0338" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>ax.scatter(x, y, s<span class="op">=</span><span class="dv">4</span>)</span>
@@ -357,7 +359,7 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 </div>
 </div>
 </div>
-<div id="9aab040b" class="cell" data-execution_count="9">
+<div id="9928c902" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can use either of the following commands to run for 100 ticks:</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>netlogo.command(<span class="st">"repeat 100 [go]"</span>)</span>
@@ -371,7 +373,7 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 <span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>energy_wolves <span class="op">=</span> netlogo.report(<span class="st">"[energy] of wolves"</span>)  <span class="co"># NetLogo returns these in random order</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="6aea89fe" class="cell" data-execution_count="10">
+<div id="b9f8c752" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.axes_grid1 <span class="im">import</span> make_axes_locatable</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>)</span>
@@ -396,18 +398,18 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="index_files/figure-html/cell-11-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="index_files/figure-html/cell-11-output-1.png" width="1103" height="454" class="figure-img"></a></p>
+<p><a href="index_files/figure-html/cell-11-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="index_files/figure-html/cell-11-output-1.png" width="1106" height="457" class="figure-img"></a></p>
 </figure>
 </div>
 </div>
 </div>
-<div id="c363192d" class="cell" data-execution_count="11">
+<div id="fc437db7" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> netlogo.repeat_report([<span class="st">"count wolves"</span>, <span class="st">"count sheep"</span>], <span class="dv">200</span>, go<span class="op">=</span><span class="st">"go"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="618edfeb" class="cell" data-execution_count="12">
+<div id="6b678383" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>counts <span class="op">=</span> pd.DataFrame(counts)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="588d69d7" class="cell" data-execution_count="13">
+<div id="ebaf6957" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>counts.plot(ax<span class="op">=</span>ax1, use_index<span class="op">=</span><span class="va">True</span>, legend<span class="op">=</span><span class="va">True</span>)</span>
@@ -434,7 +436,7 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 </div>
 </div>
 </div>
-<div id="8e6e54b2" class="cell" data-execution_count="14">
+<div id="7ea062a2" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> netlogo.repeat_report(</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    [</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"[energy] of wolves"</span>,</span>
@@ -462,7 +464,7 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 </div>
 </div>
 </div>
-<div id="5da95fb3" class="cell" data-execution_count="15">
+<div id="9400ab02" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(results.keys())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>['[energy] of wolves',
@@ -472,7 +474,7 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
  'glob_str']</code></pre>
 </div>
 </div>
-<div id="06cb7727" class="cell" data-execution_count="16">
+<div id="63f9886f" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>countdown_df <span class="op">=</span> netlogo.patch_report(<span class="st">"countdown"</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>)</span>
@@ -494,11 +496,11 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 </div>
 </div>
 </div>
-<div id="c294b2e0" class="cell" data-execution_count="17">
+<div id="acd2aa6b" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>countdown_df.to_excel(<span class="st">"countdown.xlsx"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>netlogo.patch_set(<span class="st">"countdown"</span>, countdown_df.<span class="bu">max</span>() <span class="op">-</span> countdown_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="3e93a6cf" class="cell" data-execution_count="18">
+<div id="07f4ca19" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>countdown_update_df <span class="op">=</span> netlogo.patch_report(<span class="st">"countdown"</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>)</span>
@@ -524,7 +526,7 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 </div>
 </div>
 </div>
-<div id="fd247078" class="cell" data-execution_count="19">
+<div id="e6219393" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>netlogo.kill_workspace()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
@@ -540,18 +542,7 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-important">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>I encountered an error running the code below and was unable to complete execution.</p>
-<p>The error is indicated within the pipeline.</p>
-</div>
-</div>
-</div>
-<div id="c886f130" class="cell" data-execution_count="20">
+<div id="example-2-first-block" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -567,7 +558,7 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 <span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> SALib.sample <span class="im">import</span> sobol <span class="im">as</span> sobolsample</span>
 <span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> SALib.analyze <span class="im">import</span> sobol</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="69f627ab" class="cell" data-execution_count="21">
+<div id="97f46ae2" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>problem <span class="op">=</span> {</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"num_vars"</span>: <span class="dv">6</span>,</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"names"</span>: [</span>
@@ -588,367 +579,558 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 <span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    ],</span>
 <span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="4d368381" class="cell" data-execution_count="22">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">1024</span></span>
+<div id="f2c9f3aa" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> <span class="dv">5</span>  <span class="co"># Changed</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>param_values <span class="op">=</span> sobolsample.sample(problem, n, calc_second_order<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="6fcce349" class="cell" data-execution_count="23">
+<div id="03ad25ba" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>param_values.shape</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="23">
-<pre><code>(14336, 6)</code></pre>
+<pre><code>(448, 6)</code></pre>
 </div>
 </div>
 <section id="running-the-experiments-in-parallel-using-ipyparallel" class="level3">
 <h3 class="anchored" data-anchor-id="running-the-experiments-in-parallel-using-ipyparallel">Running the Experiments in Parallel Using <code>ipyparallel</code></h3>
-<div id="6b7d4fb3" class="cell" data-execution_count="24">
+<div id="699b8356" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ipyparallel <span class="im">as</span> ipp</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>cluster <span class="op">=</span> ipp.Cluster(n<span class="op">=</span><span class="dv">4</span>)</span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>cluster.start_cluster_sync()<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Starting 4 engines with &lt;class 'ipyparallel.cluster.launcher.LocalEngineSetLauncher'&gt;</code></pre>
 </div>
-<div id="674866d5" class="cell" data-execution_count="25">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rc <span class="op">=</span> cluster.connect_client_sync()</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>rc.ids</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="440a7615" class="cell" data-execution_count="26">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>direct_view <span class="op">=</span> rc[:]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="bf78c8c1" class="cell" data-execution_count="25">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>rc <span class="op">=</span> cluster.connect_client_sync()</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>rc.wait_for_engines(n<span class="op">=</span><span class="dv">4</span>) <span class="co"># Added</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>rc.ids</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0%|          | 0/4 [00:00&lt;?, ?engine/s] 25%|██▌       | 1/4 [00:05&lt;00:16,  5.40s/engine]100%|██████████| 4/4 [00:05&lt;00:00,  1.35s/engine]</code></pre>
 </div>
-<div id="18694936" class="cell" data-execution_count="27">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Push the current working directory of the notebook to a "cwd" variable on the engines that can be accessed later</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>direct_view.push(<span class="bu">dict</span>(cwd<span class="op">=</span>os.getcwd()), block<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>[0, 1, 2, 3]</code></pre>
 </div>
-<div id="02514d49" class="cell" data-execution_count="28">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Push the "problem" variable from the notebook to a corresponding variable on the engines</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>direct_view.push(<span class="bu">dict</span>(problem<span class="op">=</span>problem), block<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="06ad33ae" class="cell" data-execution_count="29">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>px</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>os.chdir(cwd)</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pynetlogo</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>netlogo <span class="op">=</span> pynetlogo.NetLogoLink(</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    gui <span class="op">=</span> <span class="va">False</span>,</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    thd <span class="op">=</span> <span class="va">False</span>,</span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>    netlogo_home <span class="op">=</span> <span class="st">"/opt/netlogo-7-0-0"</span></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>netlogo.load_model(<span class="st">"./nlogox/Wolf Sheep Predation_v6.nlogox"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="32c31b0f" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>direct_view <span class="op">=</span> rc[:]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="efda35cf" class="cell" data-execution_count="30">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulation(experiment):</span>
+<div id="dcfdba34" class="cell" data-execution_count="27">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set the input parameters</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, name <span class="kw">in</span> <span class="bu">enumerate</span>(problem[<span class="st">"names"</span>]):</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> name <span class="op">==</span> <span class="st">"random-seed"</span>:</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>            <span class="co"># The NetLogo random seed requires a different syntax</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>            netlogo.command(<span class="st">"random-seed </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(experiment[i]))</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Otherwise, assume the input parameters are global variables</span></span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>            netlogo.command(<span class="st">"set </span><span class="sc">{0}</span><span class="st"> </span><span class="sc">{1}</span><span class="st">"</span>.<span class="bu">format</span>(name, experiment[i]))</span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    netlogo.command(<span class="st">"setup"</span>)</span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run for 100 ticks and return the number of sheep and wolf agents at each time step</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> netlogo.repeat_report([<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>], <span class="dv">100</span>)</span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> pd.Series(</span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>        [counts[<span class="st">"count sheep"</span>].values.mean(), counts[<span class="st">"count wolves"</span>].values.mean()],</span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>        index<span class="op">=</span>[<span class="st">"Avg. sheep"</span>, <span class="st">"Avg. wolves"</span>],</span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="callout callout-style-simple callout-important">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>I encountered an error running the code below and was unable to complete execution.</p>
-<p>The remaining code cells in this section (Example 2) will not be evaluated due to this issue.</p>
-<pre><code>CompositeError: one or more exceptions raised in: simulation
-[3:apply]AttributeError: 'numpy.ndarray' object has no attribute 'values'
-[1:apply]AttributeError: 'numpy.ndarray' object has no attribute 'values'
-[0:apply]AttributeError: 'numpy.ndarray' object has no attribute 'values'
-[2:apply]AttributeError: 'numpy.ndarray' object has no attribute 'values'
-.... 14332 more exceptions ...</code></pre>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Push the current working directory of the notebook to a "cwd" variable on the engines that can be accessed later</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>direct_view.push(<span class="bu">dict</span>(cwd<span class="op">=</span>os.getcwd()), block<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>[None, None, None, None]</code></pre>
 </div>
 </div>
+<div id="19e1ee7a" class="cell" data-execution_count="28">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Push the "problem" variable from the notebook to a corresponding variable on the engines</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>direct_view.push(<span class="bu">dict</span>(problem<span class="op">=</span>problem), block<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>[None, None, None, None]</code></pre>
 </div>
-<div id="692f3846" class="cell" data-execution_count="31">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>lview <span class="op">=</span> rc.load_balanced_view()</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame(lview.map_sync(simulation, param_values))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="080d5800" class="cell" data-execution_count="32">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>results.to_csv(<span class="st">"./data/Sobol_parallel.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="6ef5c89c" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>px</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>os.chdir(cwd)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pynetlogo</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>netlogo <span class="op">=</span> pynetlogo.NetLogoLink(</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    gui <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    thd <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>    netlogo_home <span class="op">=</span> <span class="st">"/opt/netlogo-7-0-0"</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>netlogo.load_model(<span class="st">"./nlogox/Wolf Sheep Predation_v6.nlogox"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>[stderr:0] WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.jpype.JPypeContext in an unnamed module (file:/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/org.jpype.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by scala.runtime.LazyVals$ (file:/opt/netlogo-7-0-0/lib/app/scala3-library_3-3.7.0.jar)
+WARNING: Please consider reporting this to the maintainers of class scala.runtime.LazyVals$
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release</code></pre>
 </div>
-<div id="c2c4cfbb" class="cell" data-execution_count="33">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>results.head(<span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<pre><code>[stderr:1] WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.jpype.JPypeContext in an unnamed module (file:/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/org.jpype.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by scala.runtime.LazyVals$ (file:/opt/netlogo-7-0-0/lib/app/scala3-library_3-3.7.0.jar)
+WARNING: Please consider reporting this to the maintainers of class scala.runtime.LazyVals$
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>[stderr:3] WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.jpype.JPypeContext in an unnamed module (file:/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/org.jpype.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by scala.runtime.LazyVals$ (file:/opt/netlogo-7-0-0/lib/app/scala3-library_3-3.7.0.jar)
+WARNING: Please consider reporting this to the maintainers of class scala.runtime.LazyVals$
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<pre><code>[stderr:2] WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.jpype.JPypeContext in an unnamed module (file:/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/org.jpype.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by scala.runtime.LazyVals$ (file:/opt/netlogo-7-0-0/lib/app/scala3-library_3-3.7.0.jar)
+WARNING: Please consider reporting this to the maintainers of class scala.runtime.LazyVals$
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:00&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:01&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:02&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:03&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:03&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:03&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:03&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:03&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:03&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:03&lt;?, ?tasks/s]%px:   0%|          | 0/4 [00:03&lt;?, ?tasks/s]%px:  50%|█████     | 2/4 [00:03&lt;00:00, 19.53tasks/s]%px:  75%|███████▌  | 3/4 [00:04&lt;00:00,  8.64tasks/s]%px: 100%|██████████| 4/4 [00:04&lt;00:00,  1.04s/tasks]</code></pre>
+</div>
+</div>
+<div id="2c240c3e" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simulation(experiment):</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set the input parameters</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, name <span class="kw">in</span> <span class="bu">enumerate</span>(problem[<span class="st">"names"</span>]):</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> name <span class="op">==</span> <span class="st">"random-seed"</span>:</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>            <span class="co"># The NetLogo random seed requires a different syntax</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>            netlogo.command(<span class="st">"random-seed </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(experiment[i]))</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Otherwise, assume the input parameters are global variables</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>            netlogo.command(<span class="st">"set </span><span class="sc">{0}</span><span class="st"> </span><span class="sc">{1}</span><span class="st">"</span>.<span class="bu">format</span>(name, experiment[i]))</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>    netlogo.command(<span class="st">"setup"</span>)</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run for 100 ticks and return the number of sheep and wolf agents at each time step</span></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> netlogo.repeat_report([<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>], <span class="dv">100</span>)</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> pd.Series( <span class="co"># Added</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>        [np.mean(counts[<span class="st">"count sheep"</span>]), np.mean(counts[<span class="st">"count wolves"</span>])],</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>        index<span class="op">=</span>[<span class="st">"Avg. sheep"</span>, <span class="st">"Avg. wolves"</span>],</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Original code:</span></span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">#</span></span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># results = pd.Series(</span></span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     [counts["count sheep"].values.mean(), counts["count wolves"].values.mean()],</span></span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     index=["Avg. sheep", "Avg. wolves"],</span></span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># )</span></span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="c7bdcca4" class="cell" data-execution_count="31">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>lview <span class="op">=</span> rc.load_balanced_view()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="example-2-main-run" class="cell" data-execution_count="32">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.DataFrame(lview.map_sync(simulation, param_values))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="0c00ea81" class="cell" data-execution_count="33">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>results.to_csv(<span class="st">"./data/Sobol_parallel.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="14cb25f7" class="cell" data-execution_count="34">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>results.head(<span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Avg. sheep</th>
+<th data-quarto-table-cell-role="th">Avg. wolves</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>101.594059</td>
+<td>28.465347</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>100.504950</td>
+<td>33.247525</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>85.574257</td>
+<td>20.376238</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>179.871287</td>
+<td>108.752475</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>104.237624</td>
+<td>33.504950</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
 </div>
 </section>
 <section id="using-salib-for-sensitivity-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="using-salib-for-sensitivity-analysis">Using <code>SALib</code> for Sensitivity Analysis</h3>
-<div id="cf242dde" class="cell" data-execution_count="34">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="bu">len</span>(results.columns), sharey<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, n <span class="kw">in</span> <span class="bu">enumerate</span>(results.columns):</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(results[n], <span class="dv">20</span>)</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    ax[i].set_xlabel(n)</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">"Counts"</span>)</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>fig.set_size_inches(<span class="dv">10</span>, <span class="dv">4</span>)</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>fig.subplots_adjust(wspace<span class="op">=</span><span class="fl">0.1</span>)</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="4f89ec76" class="cell" data-execution_count="35">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="bu">len</span>(results.columns), sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, n <span class="kw">in</span> <span class="bu">enumerate</span>(results.columns):</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    ax[i].hist(results[n], <span class="dv">20</span>)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    ax[i].set_xlabel(n)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">"Counts"</span>)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>fig.set_size_inches(<span class="dv">10</span>, <span class="dv">4</span>)</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>fig.subplots_adjust(wspace<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/cell-36-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="index_files/figure-html/cell-36-output-1.png" width="832" height="380" class="figure-img"></a></p>
+</figure>
 </div>
-<div id="d7592968" class="cell" data-execution_count="35">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>nrow <span class="op">=</span> <span class="dv">2</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>ncol <span class="op">=</span> <span class="dv">3</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(nrow, ncol, sharey<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> results[<span class="st">"Avg. sheep"</span>]</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, a <span class="kw">in</span> <span class="bu">enumerate</span>(ax.flatten()):</span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> param_values[:, i]</span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>    sns.regplot(</span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>x,</span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>y,</span>
-<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>a,</span>
-<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>        ci<span class="op">=</span><span class="va">None</span>,</span>
-<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">"k"</span>,</span>
-<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>        scatter_kws<span class="op">=</span>{<span class="st">"alpha"</span>: <span class="fl">0.2</span>, <span class="st">"s"</span>: <span class="dv">4</span>, <span class="st">"color"</span>: <span class="st">"gray"</span>},</span>
-<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>    pearson <span class="op">=</span> scipy.stats.pearsonr(x, y)</span>
-<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>    a.annotate(</span>
-<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"r: </span><span class="sc">{:6.3f}</span><span class="st">"</span>.<span class="bu">format</span>(pearson[<span class="dv">0</span>]),</span>
-<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>        xy<span class="op">=</span>(<span class="fl">0.15</span>, <span class="fl">0.85</span>),</span>
-<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>        xycoords<span class="op">=</span><span class="st">"axes fraction"</span>,</span>
-<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>        fontsize<span class="op">=</span><span class="dv">13</span>,</span>
-<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">divmod</span>(i, ncol)[<span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span>:</span>
-<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>        a.get_yaxis().set_visible(<span class="va">False</span>)</span>
-<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>    a.set_xlabel(problem[<span class="st">"names"</span>][i])</span>
-<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>    a.set_ylim([<span class="dv">0</span>, <span class="fl">1.1</span> <span class="op">*</span> np.<span class="bu">max</span>(y)])</span>
-<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>fig.set_size_inches(<span class="dv">9</span>, <span class="dv">9</span>, forward<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a>fig.subplots_adjust(wspace<span class="op">=</span><span class="fl">0.2</span>, hspace<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="b5b52910" class="cell" data-execution_count="36">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>Si <span class="op">=</span> sobol.analyze(</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>    problem,</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    results[<span class="st">"Avg. sheep"</span>].values,</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    calc_second_order<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    print_to_console<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="4fbda50e" class="cell" data-execution_count="37">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>Si_filter <span class="op">=</span> {k: Si[k] <span class="cf">for</span> k <span class="kw">in</span> [<span class="st">"ST"</span>, <span class="st">"ST_conf"</span>, <span class="st">"S1"</span>, <span class="st">"S1_conf"</span>]}</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>Si_df <span class="op">=</span> pd.DataFrame(Si_filter, index<span class="op">=</span>problem[<span class="st">"names"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e6ba941e" class="cell" data-execution_count="36">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>nrow <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>ncol <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(nrow, ncol, sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> results[<span class="st">"Avg. sheep"</span>]</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, a <span class="kw">in</span> <span class="bu">enumerate</span>(ax.flatten()):</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> param_values[:, i]</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>    sns.regplot(</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span>x,</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span>y,</span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>        ax<span class="op">=</span>a,</span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>        ci<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a>        color<span class="op">=</span><span class="st">"k"</span>,</span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a>        scatter_kws<span class="op">=</span>{<span class="st">"alpha"</span>: <span class="fl">0.2</span>, <span class="st">"s"</span>: <span class="dv">4</span>, <span class="st">"color"</span>: <span class="st">"gray"</span>},</span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb52-20"><a href="#cb52-20" aria-hidden="true" tabindex="-1"></a>    pearson <span class="op">=</span> scipy.stats.pearsonr(x, y)</span>
+<span id="cb52-21"><a href="#cb52-21" aria-hidden="true" tabindex="-1"></a>    a.annotate(</span>
+<span id="cb52-22"><a href="#cb52-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"r: </span><span class="sc">{:6.3f}</span><span class="st">"</span>.<span class="bu">format</span>(pearson[<span class="dv">0</span>]),</span>
+<span id="cb52-23"><a href="#cb52-23" aria-hidden="true" tabindex="-1"></a>        xy<span class="op">=</span>(<span class="fl">0.15</span>, <span class="fl">0.85</span>),</span>
+<span id="cb52-24"><a href="#cb52-24" aria-hidden="true" tabindex="-1"></a>        xycoords<span class="op">=</span><span class="st">"axes fraction"</span>,</span>
+<span id="cb52-25"><a href="#cb52-25" aria-hidden="true" tabindex="-1"></a>        fontsize<span class="op">=</span><span class="dv">13</span>,</span>
+<span id="cb52-26"><a href="#cb52-26" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb52-27"><a href="#cb52-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">divmod</span>(i, ncol)[<span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb52-28"><a href="#cb52-28" aria-hidden="true" tabindex="-1"></a>        a.get_yaxis().set_visible(<span class="va">False</span>)</span>
+<span id="cb52-29"><a href="#cb52-29" aria-hidden="true" tabindex="-1"></a>    a.set_xlabel(problem[<span class="st">"names"</span>][i])</span>
+<span id="cb52-30"><a href="#cb52-30" aria-hidden="true" tabindex="-1"></a>    a.set_ylim([<span class="dv">0</span>, <span class="fl">1.1</span> <span class="op">*</span> np.<span class="bu">max</span>(y)])</span>
+<span id="cb52-31"><a href="#cb52-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-32"><a href="#cb52-32" aria-hidden="true" tabindex="-1"></a>fig.set_size_inches(<span class="dv">9</span>, <span class="dv">9</span>, forward<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb52-33"><a href="#cb52-33" aria-hidden="true" tabindex="-1"></a>fig.subplots_adjust(wspace<span class="op">=</span><span class="fl">0.2</span>, hspace<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb52-34"><a href="#cb52-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-35"><a href="#cb52-35" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/cell-37-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="index_files/figure-html/cell-37-output-1.png" width="770" height="749" class="figure-img"></a></p>
+</figure>
 </div>
-<div id="e40a7da8" class="cell" data-execution_count="38">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>Si_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="58825118" class="cell" data-execution_count="39">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>)</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>indices <span class="op">=</span> Si_df[[<span class="st">"S1"</span>, <span class="st">"ST"</span>]]</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>err <span class="op">=</span> Si_df[[<span class="st">"S1_conf"</span>, <span class="st">"ST_conf"</span>]]</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>indices.plot.bar(yerr<span class="op">=</span>err.values.T, ax<span class="op">=</span>ax)</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>fig.set_size_inches(<span class="dv">8</span>, <span class="dv">4</span>)</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="2ea1b720" class="cell" data-execution_count="40">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> pi</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.legend_handler <span class="im">import</span> HandlerPatch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="1a15f1fd" class="cell" data-execution_count="37">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>Si <span class="op">=</span> sobol.analyze(</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    problem,</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>    results[<span class="st">"Avg. sheep"</span>].values,</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    calc_second_order<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    print_to_console<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/SALib/util/__init__.py:274: FutureWarning: unique with argument that is not not a Series, Index, ExtensionArray, or np.ndarray is deprecated and will raise in a future version.
+  names = list(pd.unique(groups))</code></pre>
 </div>
-<div id="1fa2245e" class="cell" data-execution_count="41">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize(x, xmin, xmax):</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (x <span class="op">-</span> xmin) <span class="op">/</span> (xmax <span class="op">-</span> xmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="2b5eb8af" class="cell" data-execution_count="42">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_circles(ax, locs, names, max_s, stats, smax, smin, fc, ec, lw, zorder):</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.asarray([stats[name] <span class="cf">for</span> name <span class="kw">in</span> names])</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="fl">0.01</span> <span class="op">+</span> max_s <span class="op">*</span> np.sqrt(normalize(s, smin, smax))</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>    fill <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> loc, name, si <span class="kw">in</span> <span class="bu">zip</span>(locs, names, s):</span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> fc <span class="op">==</span> <span class="st">"w"</span>:</span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>            fill <span class="op">=</span> <span class="va">False</span></span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>            ec <span class="op">=</span> <span class="st">"none"</span></span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> np.cos(loc)</span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> np.sin(loc)</span>
-<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>        circle <span class="op">=</span> plt.Circle(</span>
-<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>            (x, y),</span>
-<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>            radius<span class="op">=</span>si,</span>
-<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>            ec<span class="op">=</span>ec,</span>
-<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>            fc<span class="op">=</span>fc,</span>
-<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a>            transform<span class="op">=</span>ax.transData._b,</span>
-<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>            zorder<span class="op">=</span>zorder,</span>
-<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>            lw<span class="op">=</span>lw,</span>
-<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>            fill<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a>        ax.add_artist(circle)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="4814d1d8" class="cell" data-execution_count="38">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>Si_filter <span class="op">=</span> {k: Si[k] <span class="cf">for</span> k <span class="kw">in</span> [<span class="st">"ST"</span>, <span class="st">"ST_conf"</span>, <span class="st">"S1"</span>, <span class="st">"S1_conf"</span>]}</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>Si_df <span class="op">=</span> pd.DataFrame(Si_filter, index<span class="op">=</span>problem[<span class="st">"names"</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="f60ca9e2" class="cell" data-execution_count="43">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">filter</span>(sobol_indices, names, locs, criterion, threshold):</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> criterion <span class="kw">in</span> [<span class="st">"ST"</span>, <span class="st">"S1"</span>, <span class="st">"S2"</span>]:</span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> sobol_indices[criterion]</span>
-<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> np.<span class="bu">abs</span>(data)</span>
-<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> data.flatten()  <span class="co"># flatten in case of S2</span></span>
-<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># </span><span class="al">TODO</span><span class="co">:: remove nans</span></span>
-<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>        filtered <span class="op">=</span> [(name, locs[i]) <span class="cf">for</span> i, name <span class="kw">in</span> <span class="bu">enumerate</span>(names) <span class="cf">if</span> data[i] <span class="op">&gt;</span> threshold]</span>
-<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>        filtered_names, filtered_locs <span class="op">=</span> <span class="bu">zip</span>(<span class="op">*</span>filtered)</span>
-<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> criterion <span class="kw">in</span> [<span class="st">"ST_conf"</span>, <span class="st">"S1_conf"</span>, <span class="st">"S2_conf"</span>]:</span>
-<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
-<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"unknown value for criterion"</span>)</span>
-<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filtered_names, filtered_locs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="312d8538" class="cell" data-execution_count="39">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>Si_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">ST</th>
+<th data-quarto-table-cell-role="th">ST_conf</th>
+<th data-quarto-table-cell-role="th">S1</th>
+<th data-quarto-table-cell-role="th">S1_conf</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">random-seed</th>
+<td>0.056705</td>
+<td>0.039673</td>
+<td>0.036567</td>
+<td>0.092495</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">grass-regrowth-time</th>
+<td>0.246658</td>
+<td>0.215558</td>
+<td>0.162614</td>
+<td>0.188970</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">sheep-gain-from-food</th>
+<td>0.779248</td>
+<td>0.565153</td>
+<td>0.252965</td>
+<td>0.371308</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">wolf-gain-from-food</th>
+<td>0.539663</td>
+<td>0.301630</td>
+<td>0.384790</td>
+<td>0.279285</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">sheep-reproduce</th>
+<td>0.147828</td>
+<td>0.099676</td>
+<td>-0.049013</td>
+<td>0.253315</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">wolf-reproduce</th>
+<td>0.402822</td>
+<td>0.229209</td>
+<td>0.266902</td>
+<td>0.352499</td>
+</tr>
+</tbody>
+</table>
+
 </div>
-<div id="f89e71ad" class="cell" data-execution_count="44">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_sobol_indices(sobol_indices, criterion<span class="op">=</span><span class="st">"ST"</span>, threshold<span class="op">=</span><span class="fl">0.01</span>):</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""plot sobol indices on a radial plot</span></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="co">    sobol_indices : dict</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="co">                    the return from SAlib</span></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="co">    criterion : {'ST', 'S1', 'S2', 'ST_conf', 'S1_conf', 'S2_conf'}, optional</span></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="co">    threshold : float</span></span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a><span class="co">                only visualize variables with criterion larger than cutoff</span></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>    max_linewidth_s2 <span class="op">=</span> <span class="dv">15</span>  <span class="co"># 25*1.8</span></span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>    max_s_radius <span class="op">=</span> <span class="fl">0.3</span></span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># prepare data</span></span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use the absolute values of all the indices</span></span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sobol_indices = {key:np.abs(stats) for key, stats in sobol_indices.items()}</span></span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># dataframe with ST and S1</span></span>
-<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>    sobol_stats <span class="op">=</span> {key: sobol_indices[key] <span class="cf">for</span> key <span class="kw">in</span> [<span class="st">"ST"</span>, <span class="st">"S1"</span>]}</span>
-<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>    sobol_stats <span class="op">=</span> pd.DataFrame(sobol_stats, index<span class="op">=</span>problem[<span class="st">"names"</span>])</span>
-<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>    smax <span class="op">=</span> sobol_stats.<span class="bu">max</span>().<span class="bu">max</span>()</span>
-<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>    smin <span class="op">=</span> sobol_stats.<span class="bu">min</span>().<span class="bu">min</span>()</span>
-<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># dataframe with s2</span></span>
-<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a>    s2 <span class="op">=</span> pd.DataFrame(sobol_indices[<span class="st">"S2"</span>], index<span class="op">=</span>problem[<span class="st">"names"</span>], columns<span class="op">=</span>problem[<span class="st">"names"</span>])</span>
-<span id="cb51-29"><a href="#cb51-29" aria-hidden="true" tabindex="-1"></a>    s2[s2 <span class="op">&lt;</span> <span class="fl">0.0</span>] <span class="op">=</span> <span class="fl">0.0</span>  <span class="co"># Set negative values to 0 (artifact from small sample sizes)</span></span>
-<span id="cb51-30"><a href="#cb51-30" aria-hidden="true" tabindex="-1"></a>    s2max <span class="op">=</span> s2.<span class="bu">max</span>().<span class="bu">max</span>()</span>
-<span id="cb51-31"><a href="#cb51-31" aria-hidden="true" tabindex="-1"></a>    s2min <span class="op">=</span> s2.<span class="bu">min</span>().<span class="bu">min</span>()</span>
-<span id="cb51-32"><a href="#cb51-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-33"><a href="#cb51-33" aria-hidden="true" tabindex="-1"></a>    names <span class="op">=</span> problem[<span class="st">"names"</span>]</span>
-<span id="cb51-34"><a href="#cb51-34" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(names)</span>
-<span id="cb51-35"><a href="#cb51-35" aria-hidden="true" tabindex="-1"></a>    ticklocs <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> pi, n <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb51-36"><a href="#cb51-36" aria-hidden="true" tabindex="-1"></a>    locs <span class="op">=</span> ticklocs[<span class="dv">0</span>:<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb51-37"><a href="#cb51-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-38"><a href="#cb51-38" aria-hidden="true" tabindex="-1"></a>    filtered_names, filtered_locs <span class="op">=</span> <span class="bu">filter</span>(sobol_indices, names, locs, criterion, threshold)</span>
-<span id="cb51-39"><a href="#cb51-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-40"><a href="#cb51-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># setup figure</span></span>
-<span id="cb51-41"><a href="#cb51-41" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure()</span>
-<span id="cb51-42"><a href="#cb51-42" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>, polar<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb51-43"><a href="#cb51-43" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">False</span>)</span>
-<span id="cb51-44"><a href="#cb51-44" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">"polar"</span>].set_visible(<span class="va">False</span>)</span>
-<span id="cb51-45"><a href="#cb51-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-46"><a href="#cb51-46" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks(locs)</span>
-<span id="cb51-47"><a href="#cb51-47" aria-hidden="true" tabindex="-1"></a>    ax.set_xticklabels(names)</span>
-<span id="cb51-48"><a href="#cb51-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-49"><a href="#cb51-49" aria-hidden="true" tabindex="-1"></a>    ax.set_yticklabels([])</span>
-<span id="cb51-50"><a href="#cb51-50" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(top<span class="op">=</span><span class="fl">1.4</span>)</span>
-<span id="cb51-51"><a href="#cb51-51" aria-hidden="true" tabindex="-1"></a>    legend(ax)</span>
-<span id="cb51-52"><a href="#cb51-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-53"><a href="#cb51-53" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot ST</span></span>
-<span id="cb51-54"><a href="#cb51-54" aria-hidden="true" tabindex="-1"></a>    plot_circles(</span>
-<span id="cb51-55"><a href="#cb51-55" aria-hidden="true" tabindex="-1"></a>        ax,</span>
-<span id="cb51-56"><a href="#cb51-56" aria-hidden="true" tabindex="-1"></a>        filtered_locs,</span>
-<span id="cb51-57"><a href="#cb51-57" aria-hidden="true" tabindex="-1"></a>        filtered_names,</span>
-<span id="cb51-58"><a href="#cb51-58" aria-hidden="true" tabindex="-1"></a>        max_s_radius,</span>
-<span id="cb51-59"><a href="#cb51-59" aria-hidden="true" tabindex="-1"></a>        sobol_stats[<span class="st">"ST"</span>],</span>
-<span id="cb51-60"><a href="#cb51-60" aria-hidden="true" tabindex="-1"></a>        smax,</span>
-<span id="cb51-61"><a href="#cb51-61" aria-hidden="true" tabindex="-1"></a>        smin,</span>
-<span id="cb51-62"><a href="#cb51-62" aria-hidden="true" tabindex="-1"></a>        <span class="st">"w"</span>,</span>
-<span id="cb51-63"><a href="#cb51-63" aria-hidden="true" tabindex="-1"></a>        <span class="st">"k"</span>,</span>
-<span id="cb51-64"><a href="#cb51-64" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>,</span>
-<span id="cb51-65"><a href="#cb51-65" aria-hidden="true" tabindex="-1"></a>        <span class="dv">9</span>,</span>
-<span id="cb51-66"><a href="#cb51-66" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb51-67"><a href="#cb51-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-68"><a href="#cb51-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot S1</span></span>
-<span id="cb51-69"><a href="#cb51-69" aria-hidden="true" tabindex="-1"></a>    plot_circles(</span>
-<span id="cb51-70"><a href="#cb51-70" aria-hidden="true" tabindex="-1"></a>        ax,</span>
-<span id="cb51-71"><a href="#cb51-71" aria-hidden="true" tabindex="-1"></a>        filtered_locs,</span>
-<span id="cb51-72"><a href="#cb51-72" aria-hidden="true" tabindex="-1"></a>        filtered_names,</span>
-<span id="cb51-73"><a href="#cb51-73" aria-hidden="true" tabindex="-1"></a>        max_s_radius,</span>
-<span id="cb51-74"><a href="#cb51-74" aria-hidden="true" tabindex="-1"></a>        sobol_stats[<span class="st">"S1"</span>],</span>
-<span id="cb51-75"><a href="#cb51-75" aria-hidden="true" tabindex="-1"></a>        smax,</span>
-<span id="cb51-76"><a href="#cb51-76" aria-hidden="true" tabindex="-1"></a>        smin,</span>
-<span id="cb51-77"><a href="#cb51-77" aria-hidden="true" tabindex="-1"></a>        <span class="st">"k"</span>,</span>
-<span id="cb51-78"><a href="#cb51-78" aria-hidden="true" tabindex="-1"></a>        <span class="st">"k"</span>,</span>
-<span id="cb51-79"><a href="#cb51-79" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>,</span>
-<span id="cb51-80"><a href="#cb51-80" aria-hidden="true" tabindex="-1"></a>        <span class="dv">10</span>,</span>
-<span id="cb51-81"><a href="#cb51-81" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb51-82"><a href="#cb51-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-83"><a href="#cb51-83" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot S2</span></span>
-<span id="cb51-84"><a href="#cb51-84" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name1, name2 <span class="kw">in</span> itertools.combinations(<span class="bu">zip</span>(filtered_names, filtered_locs), <span class="dv">2</span>):</span>
-<span id="cb51-85"><a href="#cb51-85" aria-hidden="true" tabindex="-1"></a>        name1, loc1 <span class="op">=</span> name1</span>
-<span id="cb51-86"><a href="#cb51-86" aria-hidden="true" tabindex="-1"></a>        name2, loc2 <span class="op">=</span> name2</span>
-<span id="cb51-87"><a href="#cb51-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-88"><a href="#cb51-88" aria-hidden="true" tabindex="-1"></a>        weight <span class="op">=</span> s2.loc[name1, name2]</span>
-<span id="cb51-89"><a href="#cb51-89" aria-hidden="true" tabindex="-1"></a>        lw <span class="op">=</span> <span class="fl">0.5</span> <span class="op">+</span> max_linewidth_s2 <span class="op">*</span> normalize(weight, s2min, s2max)</span>
-<span id="cb51-90"><a href="#cb51-90" aria-hidden="true" tabindex="-1"></a>        ax.plot([loc1, loc2], [<span class="dv">1</span>, <span class="dv">1</span>], c<span class="op">=</span><span class="st">"darkgray"</span>, lw<span class="op">=</span>lw, zorder<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb51-91"><a href="#cb51-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-92"><a href="#cb51-92" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="4886b970" class="cell" data-execution_count="45">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> HandlerCircle(HandlerPatch):</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> create_artists(</span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    ):</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>        center <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> width <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> xdescent, <span class="fl">0.5</span> <span class="op">*</span> height <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> ydescent</span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> plt.Circle(xy<span class="op">=</span>center, radius<span class="op">=</span>orig_handle.radius)</span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.update_prop(p, orig_handle, legend)</span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>        p.set_transform(trans)</span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [p]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="5cffe669" class="cell" data-execution_count="46">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> legend(ax):</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>    some_identifiers <span class="op">=</span> [</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>        plt.Circle((<span class="dv">0</span>, <span class="dv">0</span>), radius<span class="op">=</span><span class="dv">5</span>, color<span class="op">=</span><span class="st">"k"</span>, fill<span class="op">=</span><span class="va">False</span>, lw<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>        plt.Circle((<span class="dv">0</span>, <span class="dv">0</span>), radius<span class="op">=</span><span class="dv">5</span>, color<span class="op">=</span><span class="st">"k"</span>, fill<span class="op">=</span><span class="va">True</span>),</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>        plt.Line2D([<span class="dv">0</span>, <span class="fl">0.5</span>], [<span class="dv">0</span>, <span class="fl">0.5</span>], lw<span class="op">=</span><span class="dv">8</span>, color<span class="op">=</span><span class="st">"darkgray"</span>),</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>    ax.legend(</span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>        some_identifiers,</span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>        [<span class="st">"ST"</span>, <span class="st">"S1"</span>, <span class="st">"S2"</span>],</span>
-<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a>        loc<span class="op">=</span>(<span class="dv">1</span>, <span class="fl">0.75</span>),</span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>        borderaxespad<span class="op">=</span><span class="fl">0.1</span>,</span>
-<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>        mode<span class="op">=</span><span class="st">"expand"</span>,</span>
-<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>        handler_map<span class="op">=</span>{plt.Circle: HandlerCircle()},</span>
-<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="33c68e1b" class="cell" data-execution_count="40">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>indices <span class="op">=</span> Si_df[[<span class="st">"S1"</span>, <span class="st">"ST"</span>]]</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>err <span class="op">=</span> Si_df[[<span class="st">"S1_conf"</span>, <span class="st">"ST_conf"</span>]]</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>indices.plot.bar(yerr<span class="op">=</span>err.values.T, ax<span class="op">=</span>ax)</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>fig.set_size_inches(<span class="dv">8</span>, <span class="dv">4</span>)</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/cell-41-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="index_files/figure-html/cell-41-output-1.png" width="662" height="542" class="figure-img"></a></p>
+</figure>
 </div>
-<div id="10aab4f0" class="cell" data-execution_count="47">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">"whitegrid"</span>)</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plot_sobol_indices(Si, criterion<span class="op">=</span><span class="st">"ST"</span>, threshold<span class="op">=</span><span class="fl">0.005</span>)</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>fig.set_size_inches(<span class="dv">7</span>, <span class="dv">7</span>)</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div id="d6fe556d" class="cell" data-execution_count="41">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> pi</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.legend_handler <span class="im">import</span> HandlerPatch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="05fee7ea" class="cell" data-execution_count="42">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> normalize(x, xmin, xmax):</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (x <span class="op">-</span> xmin) <span class="op">/</span> (xmax <span class="op">-</span> xmin)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="e073b1b1" class="cell" data-execution_count="43">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_circles(ax, locs, names, max_s, stats, smax, smin, fc, ec, lw, zorder):</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> np.asarray([stats[name] <span class="cf">for</span> name <span class="kw">in</span> names])</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="fl">0.01</span> <span class="op">+</span> max_s <span class="op">*</span> np.sqrt(normalize(s, smin, smax))</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>    fill <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> loc, name, si <span class="kw">in</span> <span class="bu">zip</span>(locs, names, s):</span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> fc <span class="op">==</span> <span class="st">"w"</span>:</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>            fill <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a>            ec <span class="op">=</span> <span class="st">"none"</span></span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-12"><a href="#cb60-12" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> np.cos(loc)</span>
+<span id="cb60-13"><a href="#cb60-13" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> np.sin(loc)</span>
+<span id="cb60-14"><a href="#cb60-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-15"><a href="#cb60-15" aria-hidden="true" tabindex="-1"></a>        circle <span class="op">=</span> plt.Circle(</span>
+<span id="cb60-16"><a href="#cb60-16" aria-hidden="true" tabindex="-1"></a>            (x, y),</span>
+<span id="cb60-17"><a href="#cb60-17" aria-hidden="true" tabindex="-1"></a>            radius<span class="op">=</span>si,</span>
+<span id="cb60-18"><a href="#cb60-18" aria-hidden="true" tabindex="-1"></a>            ec<span class="op">=</span>ec,</span>
+<span id="cb60-19"><a href="#cb60-19" aria-hidden="true" tabindex="-1"></a>            fc<span class="op">=</span>fc,</span>
+<span id="cb60-20"><a href="#cb60-20" aria-hidden="true" tabindex="-1"></a>            transform<span class="op">=</span>ax.transData._b,</span>
+<span id="cb60-21"><a href="#cb60-21" aria-hidden="true" tabindex="-1"></a>            zorder<span class="op">=</span>zorder,</span>
+<span id="cb60-22"><a href="#cb60-22" aria-hidden="true" tabindex="-1"></a>            lw<span class="op">=</span>lw,</span>
+<span id="cb60-23"><a href="#cb60-23" aria-hidden="true" tabindex="-1"></a>            fill<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb60-24"><a href="#cb60-24" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb60-25"><a href="#cb60-25" aria-hidden="true" tabindex="-1"></a>        ax.add_artist(circle)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="0cbaf36d" class="cell" data-execution_count="44">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="bu">filter</span>(sobol_indices, names, locs, criterion, threshold):</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> criterion <span class="kw">in</span> [<span class="st">"ST"</span>, <span class="st">"S1"</span>, <span class="st">"S2"</span>]:</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> sobol_indices[criterion]</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> np.<span class="bu">abs</span>(data)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>        data <span class="op">=</span> data.flatten()  <span class="co"># flatten in case of S2</span></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># </span><span class="al">TODO</span><span class="co">:: remove nans</span></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a>        filtered <span class="op">=</span> [(name, locs[i]) <span class="cf">for</span> i, name <span class="kw">in</span> <span class="bu">enumerate</span>(names) <span class="cf">if</span> data[i] <span class="op">&gt;</span> threshold]</span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>        filtered_names, filtered_locs <span class="op">=</span> <span class="bu">zip</span>(<span class="op">*</span>filtered)</span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> criterion <span class="kw">in</span> [<span class="st">"ST_conf"</span>, <span class="st">"S1_conf"</span>, <span class="st">"S2_conf"</span>]:</span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"unknown value for criterion"</span>)</span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> filtered_names, filtered_locs</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="e40945b2" class="cell" data-execution_count="45">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_sobol_indices(sobol_indices, criterion<span class="op">=</span><span class="st">"ST"</span>, threshold<span class="op">=</span><span class="fl">0.01</span>):</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""plot sobol indices on a radial plot</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a><span class="co">    sobol_indices : dict</span></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a><span class="co">                    the return from SAlib</span></span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a><span class="co">    criterion : {'ST', 'S1', 'S2', 'ST_conf', 'S1_conf', 'S2_conf'}, optional</span></span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a><span class="co">    threshold : float</span></span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a><span class="co">                only visualize variables with criterion larger than cutoff</span></span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>    max_linewidth_s2 <span class="op">=</span> <span class="dv">15</span>  <span class="co"># 25*1.8</span></span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>    max_s_radius <span class="op">=</span> <span class="fl">0.3</span></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># prepare data</span></span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use the absolute values of all the indices</span></span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sobol_indices = {key:np.abs(stats) for key, stats in sobol_indices.items()}</span></span>
+<span id="cb62-19"><a href="#cb62-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-20"><a href="#cb62-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># dataframe with ST and S1</span></span>
+<span id="cb62-21"><a href="#cb62-21" aria-hidden="true" tabindex="-1"></a>    sobol_stats <span class="op">=</span> {key: sobol_indices[key] <span class="cf">for</span> key <span class="kw">in</span> [<span class="st">"ST"</span>, <span class="st">"S1"</span>]}</span>
+<span id="cb62-22"><a href="#cb62-22" aria-hidden="true" tabindex="-1"></a>    sobol_stats <span class="op">=</span> pd.DataFrame(sobol_stats, index<span class="op">=</span>problem[<span class="st">"names"</span>])</span>
+<span id="cb62-23"><a href="#cb62-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-24"><a href="#cb62-24" aria-hidden="true" tabindex="-1"></a>    smax <span class="op">=</span> sobol_stats.<span class="bu">max</span>().<span class="bu">max</span>()</span>
+<span id="cb62-25"><a href="#cb62-25" aria-hidden="true" tabindex="-1"></a>    smin <span class="op">=</span> sobol_stats.<span class="bu">min</span>().<span class="bu">min</span>()</span>
+<span id="cb62-26"><a href="#cb62-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-27"><a href="#cb62-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># dataframe with s2</span></span>
+<span id="cb62-28"><a href="#cb62-28" aria-hidden="true" tabindex="-1"></a>    s2 <span class="op">=</span> pd.DataFrame(sobol_indices[<span class="st">"S2"</span>], index<span class="op">=</span>problem[<span class="st">"names"</span>], columns<span class="op">=</span>problem[<span class="st">"names"</span>])</span>
+<span id="cb62-29"><a href="#cb62-29" aria-hidden="true" tabindex="-1"></a>    s2[s2 <span class="op">&lt;</span> <span class="fl">0.0</span>] <span class="op">=</span> <span class="fl">0.0</span>  <span class="co"># Set negative values to 0 (artifact from small sample sizes)</span></span>
+<span id="cb62-30"><a href="#cb62-30" aria-hidden="true" tabindex="-1"></a>    s2max <span class="op">=</span> s2.<span class="bu">max</span>().<span class="bu">max</span>()</span>
+<span id="cb62-31"><a href="#cb62-31" aria-hidden="true" tabindex="-1"></a>    s2min <span class="op">=</span> s2.<span class="bu">min</span>().<span class="bu">min</span>()</span>
+<span id="cb62-32"><a href="#cb62-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-33"><a href="#cb62-33" aria-hidden="true" tabindex="-1"></a>    names <span class="op">=</span> problem[<span class="st">"names"</span>]</span>
+<span id="cb62-34"><a href="#cb62-34" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(names)</span>
+<span id="cb62-35"><a href="#cb62-35" aria-hidden="true" tabindex="-1"></a>    ticklocs <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">2</span> <span class="op">*</span> pi, n <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb62-36"><a href="#cb62-36" aria-hidden="true" tabindex="-1"></a>    locs <span class="op">=</span> ticklocs[<span class="dv">0</span>:<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb62-37"><a href="#cb62-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-38"><a href="#cb62-38" aria-hidden="true" tabindex="-1"></a>    filtered_names, filtered_locs <span class="op">=</span> <span class="bu">filter</span>(sobol_indices, names, locs, criterion, threshold)</span>
+<span id="cb62-39"><a href="#cb62-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-40"><a href="#cb62-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># setup figure</span></span>
+<span id="cb62-41"><a href="#cb62-41" aria-hidden="true" tabindex="-1"></a>    fig <span class="op">=</span> plt.figure()</span>
+<span id="cb62-42"><a href="#cb62-42" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>, polar<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb62-43"><a href="#cb62-43" aria-hidden="true" tabindex="-1"></a>    ax.grid(<span class="va">False</span>)</span>
+<span id="cb62-44"><a href="#cb62-44" aria-hidden="true" tabindex="-1"></a>    ax.spines[<span class="st">"polar"</span>].set_visible(<span class="va">False</span>)</span>
+<span id="cb62-45"><a href="#cb62-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-46"><a href="#cb62-46" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks(locs)</span>
+<span id="cb62-47"><a href="#cb62-47" aria-hidden="true" tabindex="-1"></a>    ax.set_xticklabels(names)</span>
+<span id="cb62-48"><a href="#cb62-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-49"><a href="#cb62-49" aria-hidden="true" tabindex="-1"></a>    ax.set_yticklabels([])</span>
+<span id="cb62-50"><a href="#cb62-50" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(top<span class="op">=</span><span class="fl">1.4</span>)</span>
+<span id="cb62-51"><a href="#cb62-51" aria-hidden="true" tabindex="-1"></a>    legend(ax)</span>
+<span id="cb62-52"><a href="#cb62-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-53"><a href="#cb62-53" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot ST</span></span>
+<span id="cb62-54"><a href="#cb62-54" aria-hidden="true" tabindex="-1"></a>    plot_circles(</span>
+<span id="cb62-55"><a href="#cb62-55" aria-hidden="true" tabindex="-1"></a>        ax,</span>
+<span id="cb62-56"><a href="#cb62-56" aria-hidden="true" tabindex="-1"></a>        filtered_locs,</span>
+<span id="cb62-57"><a href="#cb62-57" aria-hidden="true" tabindex="-1"></a>        filtered_names,</span>
+<span id="cb62-58"><a href="#cb62-58" aria-hidden="true" tabindex="-1"></a>        max_s_radius,</span>
+<span id="cb62-59"><a href="#cb62-59" aria-hidden="true" tabindex="-1"></a>        sobol_stats[<span class="st">"ST"</span>],</span>
+<span id="cb62-60"><a href="#cb62-60" aria-hidden="true" tabindex="-1"></a>        smax,</span>
+<span id="cb62-61"><a href="#cb62-61" aria-hidden="true" tabindex="-1"></a>        smin,</span>
+<span id="cb62-62"><a href="#cb62-62" aria-hidden="true" tabindex="-1"></a>        <span class="st">"w"</span>,</span>
+<span id="cb62-63"><a href="#cb62-63" aria-hidden="true" tabindex="-1"></a>        <span class="st">"k"</span>,</span>
+<span id="cb62-64"><a href="#cb62-64" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>,</span>
+<span id="cb62-65"><a href="#cb62-65" aria-hidden="true" tabindex="-1"></a>        <span class="dv">9</span>,</span>
+<span id="cb62-66"><a href="#cb62-66" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb62-67"><a href="#cb62-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-68"><a href="#cb62-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot S1</span></span>
+<span id="cb62-69"><a href="#cb62-69" aria-hidden="true" tabindex="-1"></a>    plot_circles(</span>
+<span id="cb62-70"><a href="#cb62-70" aria-hidden="true" tabindex="-1"></a>        ax,</span>
+<span id="cb62-71"><a href="#cb62-71" aria-hidden="true" tabindex="-1"></a>        filtered_locs,</span>
+<span id="cb62-72"><a href="#cb62-72" aria-hidden="true" tabindex="-1"></a>        filtered_names,</span>
+<span id="cb62-73"><a href="#cb62-73" aria-hidden="true" tabindex="-1"></a>        max_s_radius,</span>
+<span id="cb62-74"><a href="#cb62-74" aria-hidden="true" tabindex="-1"></a>        sobol_stats[<span class="st">"S1"</span>],</span>
+<span id="cb62-75"><a href="#cb62-75" aria-hidden="true" tabindex="-1"></a>        smax,</span>
+<span id="cb62-76"><a href="#cb62-76" aria-hidden="true" tabindex="-1"></a>        smin,</span>
+<span id="cb62-77"><a href="#cb62-77" aria-hidden="true" tabindex="-1"></a>        <span class="st">"k"</span>,</span>
+<span id="cb62-78"><a href="#cb62-78" aria-hidden="true" tabindex="-1"></a>        <span class="st">"k"</span>,</span>
+<span id="cb62-79"><a href="#cb62-79" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>,</span>
+<span id="cb62-80"><a href="#cb62-80" aria-hidden="true" tabindex="-1"></a>        <span class="dv">10</span>,</span>
+<span id="cb62-81"><a href="#cb62-81" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb62-82"><a href="#cb62-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-83"><a href="#cb62-83" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot S2</span></span>
+<span id="cb62-84"><a href="#cb62-84" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name1, name2 <span class="kw">in</span> itertools.combinations(<span class="bu">zip</span>(filtered_names, filtered_locs), <span class="dv">2</span>):</span>
+<span id="cb62-85"><a href="#cb62-85" aria-hidden="true" tabindex="-1"></a>        name1, loc1 <span class="op">=</span> name1</span>
+<span id="cb62-86"><a href="#cb62-86" aria-hidden="true" tabindex="-1"></a>        name2, loc2 <span class="op">=</span> name2</span>
+<span id="cb62-87"><a href="#cb62-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-88"><a href="#cb62-88" aria-hidden="true" tabindex="-1"></a>        weight <span class="op">=</span> s2.loc[name1, name2]</span>
+<span id="cb62-89"><a href="#cb62-89" aria-hidden="true" tabindex="-1"></a>        lw <span class="op">=</span> <span class="fl">0.5</span> <span class="op">+</span> max_linewidth_s2 <span class="op">*</span> normalize(weight, s2min, s2max)</span>
+<span id="cb62-90"><a href="#cb62-90" aria-hidden="true" tabindex="-1"></a>        ax.plot([loc1, loc2], [<span class="dv">1</span>, <span class="dv">1</span>], c<span class="op">=</span><span class="st">"darkgray"</span>, lw<span class="op">=</span>lw, zorder<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb62-91"><a href="#cb62-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-92"><a href="#cb62-92" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="7b8496a2" class="cell" data-execution_count="46">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> HandlerCircle(HandlerPatch):</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> create_artists(</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>    ):</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>        center <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> width <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> xdescent, <span class="fl">0.5</span> <span class="op">*</span> height <span class="op">-</span> <span class="fl">0.5</span> <span class="op">*</span> ydescent</span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>        p <span class="op">=</span> plt.Circle(xy<span class="op">=</span>center, radius<span class="op">=</span>orig_handle.radius)</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.update_prop(p, orig_handle, legend)</span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>        p.set_transform(trans)</span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [p]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="a13c5e94" class="cell" data-execution_count="47">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> legend(ax):</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>    some_identifiers <span class="op">=</span> [</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>        plt.Circle((<span class="dv">0</span>, <span class="dv">0</span>), radius<span class="op">=</span><span class="dv">5</span>, color<span class="op">=</span><span class="st">"k"</span>, fill<span class="op">=</span><span class="va">False</span>, lw<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>        plt.Circle((<span class="dv">0</span>, <span class="dv">0</span>), radius<span class="op">=</span><span class="dv">5</span>, color<span class="op">=</span><span class="st">"k"</span>, fill<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>        plt.Line2D([<span class="dv">0</span>, <span class="fl">0.5</span>], [<span class="dv">0</span>, <span class="fl">0.5</span>], lw<span class="op">=</span><span class="dv">8</span>, color<span class="op">=</span><span class="st">"darkgray"</span>),</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a>    ax.legend(</span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>        some_identifiers,</span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>        [<span class="st">"ST"</span>, <span class="st">"S1"</span>, <span class="st">"S2"</span>],</span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a>        loc<span class="op">=</span>(<span class="dv">1</span>, <span class="fl">0.75</span>),</span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a>        borderaxespad<span class="op">=</span><span class="fl">0.1</span>,</span>
+<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>        mode<span class="op">=</span><span class="st">"expand"</span>,</span>
+<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a>        handler_map<span class="op">=</span>{plt.Circle: HandlerCircle()},</span>
+<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="b279eaaf" class="cell" data-execution_count="48">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">"whitegrid"</span>)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plot_sobol_indices(Si, criterion<span class="op">=</span><span class="st">"ST"</span>, threshold<span class="op">=</span><span class="fl">0.005</span>)</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>fig.set_size_inches(<span class="dv">7</span>, <span class="dv">7</span>)</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="index_files/figure-html/cell-49-output-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="index_files/figure-html/cell-49-output-1.png" width="1170" height="537" class="figure-img"></a></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
 </section>
@@ -964,362 +1146,238 @@ WARNING: Unsupported JavaFX configuration: classes were loaded from 'unnamed mod
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-important">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>I encountered an error running the code below and was unable to complete execution.</p>
-<p>The error is indicated within the pipeline.</p>
-</div>
-</div>
-</div>
 <section id="running-the-experiments-in-parallel-using-a-process-pool" class="level3">
 <h3 class="anchored" data-anchor-id="running-the-experiments-in-parallel-using-a-process-pool">Running the Experiments in Parallel Using a Process Pool</h3>
-<div id="31eb049a" class="cell" data-execution_count="48">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Pool</span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pynetlogo</span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> SALib.sample <span class="im">import</span> sobol <span class="im">as</span> sobolsample</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="example-3-first-block" class="cell" data-execution_count="49">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Pool</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pynetlogo</span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> SALib.sample <span class="im">import</span> sobol <span class="im">as</span> sobolsample</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="dd12778c" class="cell" data-execution_count="49">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> initializer(modelfile):</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""initialize a subprocess</span></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="co">    modelfile : str</span></span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># we need to set the instantiated netlogo</span></span>
-<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># link as a global so run_simulation can</span></span>
-<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use it</span></span>
-<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> netlogo</span>
-<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a>    netlogo <span class="op">=</span> pynetlogo.NetLogoLink(</span>
-<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a>      gui <span class="op">=</span> <span class="va">False</span>,</span>
-<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a>      thd <span class="op">=</span> <span class="va">False</span>,</span>
-<span id="cb56-18"><a href="#cb56-18" aria-hidden="true" tabindex="-1"></a>      netlogo_home <span class="op">=</span> <span class="st">"/opt/netlogo-7-0-0"</span></span>
-<span id="cb56-19"><a href="#cb56-19" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb56-20"><a href="#cb56-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-21"><a href="#cb56-21" aria-hidden="true" tabindex="-1"></a>    netlogo.load_model(modelfile)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="2630bb01" class="cell" data-execution_count="50">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> initializer(modelfile):</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""initialize a subprocess</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="co">    modelfile : str</span></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># we need to set the instantiated netlogo</span></span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># link as a global so run_simulation can</span></span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># use it</span></span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> netlogo</span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>    netlogo <span class="op">=</span> pynetlogo.NetLogoLink(</span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a>      gui <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>      thd <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a>      netlogo_home <span class="op">=</span> <span class="st">"/opt/netlogo-7-0-0"</span></span>
+<span id="cb67-19"><a href="#cb67-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb67-20"><a href="#cb67-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-21"><a href="#cb67-21" aria-hidden="true" tabindex="-1"></a>    netlogo.load_model(modelfile)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="1d6642e1" class="cell" data-execution_count="50">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_simulation(experiment):</span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""run a netlogo model</span></span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="co">    experiments : dict</span></span>
-<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set the input parameters</span></span>
-<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key, value <span class="kw">in</span> experiment.items():</span>
-<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> key <span class="op">==</span> <span class="st">"random-seed"</span>:</span>
-<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>            <span class="co"># The NetLogo random seed requires a different syntax</span></span>
-<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>            netlogo.command(<span class="st">"random-seed </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(value))</span>
-<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Otherwise, assume the input parameters are global variables</span></span>
-<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>            netlogo.command(<span class="st">"set </span><span class="sc">{0}</span><span class="st"> </span><span class="sc">{1}</span><span class="st">"</span>.<span class="bu">format</span>(key, value))</span>
-<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a>    netlogo.command(<span class="st">"setup"</span>)</span>
-<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run for 100 ticks and return the number of sheep and</span></span>
-<span id="cb57-21"><a href="#cb57-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># wolf agents at each time step</span></span>
-<span id="cb57-22"><a href="#cb57-22" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> netlogo.repeat_report([<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>], <span class="dv">100</span>)</span>
-<span id="cb57-23"><a href="#cb57-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-24"><a href="#cb57-24" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> pd.Series(</span>
-<span id="cb57-25"><a href="#cb57-25" aria-hidden="true" tabindex="-1"></a>        [counts[<span class="st">"count sheep"</span>].values.mean(), counts[<span class="st">"count wolves"</span>].values.mean()],</span>
-<span id="cb57-26"><a href="#cb57-26" aria-hidden="true" tabindex="-1"></a>        index<span class="op">=</span>[<span class="st">"Avg. sheep"</span>, <span class="st">"Avg. wolves"</span>],</span>
-<span id="cb57-27"><a href="#cb57-27" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb57-28"><a href="#cb57-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="dd067296" class="cell" data-execution_count="51">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_simulation(experiment):</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""run a netlogo model</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a><span class="co">    experiments : dict</span></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set the input parameters</span></span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key, value <span class="kw">in</span> experiment.items():</span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> key <span class="op">==</span> <span class="st">"random-seed"</span>:</span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true" tabindex="-1"></a>            <span class="co"># The NetLogo random seed requires a different syntax</span></span>
+<span id="cb68-14"><a href="#cb68-14" aria-hidden="true" tabindex="-1"></a>            netlogo.command(<span class="st">"random-seed </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(value))</span>
+<span id="cb68-15"><a href="#cb68-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb68-16"><a href="#cb68-16" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Otherwise, assume the input parameters are global variables</span></span>
+<span id="cb68-17"><a href="#cb68-17" aria-hidden="true" tabindex="-1"></a>            netlogo.command(<span class="st">"set </span><span class="sc">{0}</span><span class="st"> </span><span class="sc">{1}</span><span class="st">"</span>.<span class="bu">format</span>(key, value))</span>
+<span id="cb68-18"><a href="#cb68-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-19"><a href="#cb68-19" aria-hidden="true" tabindex="-1"></a>    netlogo.command(<span class="st">"setup"</span>)</span>
+<span id="cb68-20"><a href="#cb68-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run for 100 ticks and return the number of sheep and</span></span>
+<span id="cb68-21"><a href="#cb68-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># wolf agents at each time step</span></span>
+<span id="cb68-22"><a href="#cb68-22" aria-hidden="true" tabindex="-1"></a>    counts <span class="op">=</span> netlogo.repeat_report([<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>], <span class="dv">100</span>)</span>
+<span id="cb68-23"><a href="#cb68-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-24"><a href="#cb68-24" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> pd.Series( <span class="co"># Added</span></span>
+<span id="cb68-25"><a href="#cb68-25" aria-hidden="true" tabindex="-1"></a>        [np.mean(counts[<span class="st">"count sheep"</span>]), np.mean(counts[<span class="st">"count wolves"</span>])],</span>
+<span id="cb68-26"><a href="#cb68-26" aria-hidden="true" tabindex="-1"></a>        index<span class="op">=</span>[<span class="st">"Avg. sheep"</span>, <span class="st">"Avg. wolves"</span>],</span>
+<span id="cb68-27"><a href="#cb68-27" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb68-28"><a href="#cb68-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-29"><a href="#cb68-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Original code:</span></span>
+<span id="cb68-30"><a href="#cb68-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">#</span></span>
+<span id="cb68-31"><a href="#cb68-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># results = pd.Series(</span></span>
+<span id="cb68-32"><a href="#cb68-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     [counts["count sheep"].values.mean(), counts["count wolves"].values.mean()],</span></span>
+<span id="cb68-33"><a href="#cb68-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">#     index=["Avg. sheep", "Avg. wolves"],</span></span>
+<span id="cb68-34"><a href="#cb68-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># )</span></span>
+<span id="cb68-35"><a href="#cb68-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-36"><a href="#cb68-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout callout-style-simple callout-important">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<div id="59dc66b7" class="cell" data-execution_count="52">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>    modelfile <span class="op">=</span> os.path.abspath(<span class="st">"./nlogox/Wolf Sheep Predation_v6.nlogox"</span>)</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>    problem <span class="op">=</span> {</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"num_vars"</span>: <span class="dv">6</span>,</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"names"</span>: [</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"random-seed"</span>,</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"grass-regrowth-time"</span>,</span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sheep-gain-from-food"</span>,</span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"wolf-gain-from-food"</span>,</span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sheep-reproduce"</span>,</span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"wolf-reproduce"</span>,</span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>        ],</span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"bounds"</span>: [[<span class="dv">1</span>, <span class="dv">100000</span>], [<span class="fl">20.0</span>, <span class="fl">40.0</span>], [<span class="fl">2.0</span>, <span class="fl">8.0</span>], [<span class="fl">16.0</span>, <span class="fl">32.0</span>], [<span class="fl">2.0</span>, <span class="fl">8.0</span>], [<span class="fl">2.0</span>, <span class="fl">8.0</span>]],</span>
+<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="dv">2</span> <span class="op">**</span> <span class="dv">1</span> <span class="co"># Changed</span></span>
+<span id="cb69-18"><a href="#cb69-18" aria-hidden="true" tabindex="-1"></a>    param_values <span class="op">=</span> sobolsample.sample(problem, n, calc_second_order<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb69-19"><a href="#cb69-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-20"><a href="#cb69-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># cast the param_values to a dataframe to</span></span>
+<span id="cb69-21"><a href="#cb69-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># include the column labels</span></span>
+<span id="cb69-22"><a href="#cb69-22" aria-hidden="true" tabindex="-1"></a>    experiments <span class="op">=</span> pd.DataFrame(param_values, columns<span class="op">=</span>problem[<span class="st">"names"</span>])</span>
+<span id="cb69-23"><a href="#cb69-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-24"><a href="#cb69-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(<span class="dv">4</span>, initializer<span class="op">=</span>initializer, initargs<span class="op">=</span>(modelfile,)) <span class="im">as</span> executor:</span>
+<span id="cb69-25"><a href="#cb69-25" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> []</span>
+<span id="cb69-26"><a href="#cb69-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> entry <span class="kw">in</span> executor.<span class="bu">map</span>(run_simulation, experiments.to_dict(<span class="st">"records"</span>)):</span>
+<span id="cb69-27"><a href="#cb69-27" aria-hidden="true" tabindex="-1"></a>            results.append(entry)</span>
+<span id="cb69-28"><a href="#cb69-28" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> pd.DataFrame(results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout-body-container">
-<p>I encountered an error running the code below and was unable to complete execution.</p>
-<p>The remaining code cells in this section (Example 3) will not be evaluated due to this issue.</p>
-<pre><code>java.lang.ClassNotFoundException: org.nlogo.sdm.NLogoThreeDSDMFormat
-    at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-    at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-    at java.base/java.lang.Class.forName0(Native Method)
-    at java.base/java.lang.Class.forName(Class.java:467)
-    at java.base/java.lang.Class.forName(Class.java:458)
-    at org.nlogo.core.Femto$.get(Femto.scala:10)
-    at org.nlogo.headless.HeadlessWorkspace.loader$lzyINIT1(HeadlessWorkspace.scala:504)
-    at org.nlogo.headless.HeadlessWorkspace.loader(HeadlessWorkspace.scala:499)
-    at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:529)
-    at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:517)
-    at netLogoLink.NetLogoLink.loadModel(NetLogoLink.java:132)
-
-Process ForkPoolWorker-284:
-Traceback (most recent call last):
-  File "NetLogoLink.java", line 132, in netLogoLink.NetLogoLink.loadModel
-Exception: Java Exception
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-java.lang.NoClassDefFoundError: org/nlogo/api/FormatterPair
-    at org.nlogo.api.ConfigurableModelLoader.addFormat(ModelLoader.scala:155)
-    at org.nlogo.fileformat.FileFormat$.standardLoader(FileFormat.scala:50)
-    at org.nlogo.fileformat.FileFormat$.standardAnyLoader(FileFormat.scala:65)
-    at org.nlogo.headless.HeadlessWorkspace.loader$lzyINIT1(HeadlessWorkspace.scala:500)
-    at org.nlogo.headless.HeadlessWorkspace.loader(HeadlessWorkspace.scala:499)
-    at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:529)
-    at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:517)
-    at netLogoLink.NetLogoLink.loadModel(NetLogoLink.java:132)
-Caused by: java.lang.ClassNotFoundException: org.nlogo.api.FormatterPair
-    at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-    at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-    ... 8 more
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 246, in load_model
-    self.link.loadModel(path)
-    ~~~~~~~~~~~~~~~~~~~^^^^^^
-
-java.lang.java.lang.ClassNotFoundException: java.lang.ClassNotFoundException: org.nlogo.sdm.NLogoThreeDSDMFormat
-
-During handling of the above exception, another exception occurred:
-
-Process ForkPoolWorker-283:
-Traceback (most recent call last):
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
-    self.run()
-    ~~~~~~~~^^
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Traceback (most recent call last):
-  File "/usr/lib/python3.13/multiprocessing/pool.py", line 109, in worker
-    initializer(*initargs)
-    ~~~~~~~~~~~^^^^^^^^^^^
-  File "ClassLoader.java", line 490, in java.lang.ClassLoader.loadClass
-  File "/tmp/ipykernel_4583/225911425.py", line 21, in initializer
-    netlogo.load_model(modelfile)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-java.lang.java.lang.ClassNotFoundException: java.lang.ClassNotFoundException: org.nlogo.api.FormatterPair
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 249, in load_model
-    raise NetLogoException(str(ex))
-pynetlogo.core.NetLogoException: java.lang.ClassNotFoundException: org.nlogo.sdm.NLogoThreeDSDMFormat
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "NetLogoLink.java", line 132, in netLogoLink.NetLogoLink.loadModel
-Exception: Java Exception
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 246, in load_model
-    self.link.loadModel(path)
-    ~~~~~~~~~~~~~~~~~~~^^^^^^
-java.lang.java.lang.NoClassDefFoundError: java.lang.NoClassDefFoundError: org/nlogo/api/FormatterPair
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
-    self.run()
-    ~~~~~~~~^^
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.13/multiprocessing/pool.py", line 109, in worker
-    initializer(*initargs)
-    ~~~~~~~~~~~^^^^^^^^^^^
-  File "/tmp/ipykernel_4583/225911425.py", line 21, in initializer
-    netlogo.load_model(modelfile)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 249, in load_model
-    raise NetLogoException(str(ex))
-pynetlogo.core.NetLogoException: java.lang.NoClassDefFoundError: org/nlogo/api/FormatterPair
-java.lang.NoClassDefFoundError: org/nlogo/fileformat/AbstractNLogoFormat$CodeComponent$
-    at org.nlogo.fileformat.NLogoFormat.CodeComponent$lzyINIT1(NLogoFormat.scala:19)
-    at org.nlogo.fileformat.NLogoFormat.CodeComponent(NLogoFormat.scala:19)
-    at org.nlogo.fileformat.AbstractNLogoFormat.codeComponent(NLogoFormat.scala:261)
-    at org.nlogo.fileformat.AbstractNLogoFormat.codeComponent$(NLogoFormat.scala:47)
-    at org.nlogo.fileformat.NLogoFormat.codeComponent(NLogoFormat.scala:17)
-    at org.nlogo.api.ModelFormat.defaultComponents(ModelFormat.scala:41)
-    at org.nlogo.api.ModelFormat.defaultComponents$(ModelFormat.scala:20)
-    at org.nlogo.fileformat.NLogoFormat.defaultComponents(NLogoFormat.scala:17)
-    at org.nlogo.api.ModelFormat.load$$anonfun$2(ModelFormat.scala:58)
-    at scala.util.Success.flatMap(Try.scala:266)
-    at org.nlogo.api.ModelFormat.load(ModelFormat.scala:57)
-    at org.nlogo.api.ModelFormat.load$(ModelFormat.scala:20)
-    at org.nlogo.fileformat.NLogoFormat.load(NLogoFormat.scala:17)
-    at org.nlogo.api.FormatterPair.load(ModelLoader.scala:55)
-    at org.nlogo.api.ModelLoader.readModel(ModelLoader.scala:91)
-    at org.nlogo.api.ModelLoader.readModel$(ModelLoader.scala:77)
-    at org.nlogo.api.ConfigurableModelLoader.readModel(ModelLoader.scala:151)
-    at org.nlogo.fileformat.NLogoAnyLoader.readModel$$anonfun$2(NLogoAnyLoader.scala:29)
-    at scala.Option.map(Option.scala:242)
-    at org.nlogo.fileformat.NLogoAnyLoader.bruteForce(NLogoAnyLoader.scala:24)
-    at org.nlogo.fileformat.NLogoAnyLoader.readModel(NLogoAnyLoader.scala:29)
-    at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:529)
-    at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:517)
-    at netLogoLink.NetLogoLink.loadModel(NetLogoLink.java:132)
-Caused by: java.lang.ClassNotFoundException: org.nlogo.fileformat.AbstractNLogoFormat$CodeComponent$
-    at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-    at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-    ... 24 more
-
-Process ForkPoolWorker-285:
-java.lang.NoClassDefFoundError: org/nlogo/core/Switch$
-    at org.nlogo.core.model.SwitchReader$.asWidget(WidgetReader.scala:416)
-    at org.nlogo.core.model.SwitchReader$.asWidget(WidgetReader.scala:412)
-    at org.nlogo.core.model.BaseWidgetReader.parse(WidgetReader.scala:182)
-    at org.nlogo.core.model.WidgetReader$.read(WidgetReader.scala:125)
-    at org.nlogo.fileformat.AbstractNLogoFormat$InterfaceComponent$.$anonfun$5(NLogoFormat.scala:226)
-    at scala.collection.immutable.List.map(List.scala:251)
-    at org.nlogo.fileformat.AbstractNLogoFormat$InterfaceComponent$.deserialize$$anonfun$4$$anonfun$1(NLogoFormat.scala:226)
-    at scala.util.Try$.apply(Try.scala:217)
-    at org.nlogo.fileformat.AbstractNLogoFormat$InterfaceComponent$.deserialize$$anonfun$4(NLogoFormat.scala:227)
-    at scala.util.Success.flatMap(Try.scala:266)
-    at org.nlogo.api.ModelFormat.addModelSection(ModelFormat.scala:91)
-    at org.nlogo.api.ModelFormat.constructModel$$anonfun$2(ModelFormat.scala:63)
-    at scala.collection.LinearSeqOps.foldLeft(LinearSeq.scala:183)
-    at scala.collection.LinearSeqOps.foldLeft$(LinearSeq.scala:179)
-    at scala.collection.immutable.List.foldLeft(List.scala:79)
-    at org.nlogo.api.ModelFormat.constructModel(ModelFormat.scala:63)
-    at org.nlogo.api.ModelFormat.constructModel$(ModelFormat.scala:20)
-    at org.nlogo.fileformat.NLogoFormat.constructModel(NLogoFormat.scala:17)
-    at org.nlogo.api.ModelFormat.load$$anonfun$2(ModelFormat.scala:58)
-    at scala.util.Success.flatMap(Try.scala:266)
-    at org.nlogo.api.ModelFormat.load(ModelFormat.scala:57)
-    at org.nlogo.api.ModelFormat.load$(ModelFormat.scala:20)
-    at org.nlogo.fileformat.NLogoFormat.load(NLogoFormat.scala:17)
-    at org.nlogo.api.FormatterPair.load(ModelLoader.scala:55)
-    at org.nlogo.api.ModelLoader.readModel(ModelLoader.scala:91)
-    at org.nlogo.api.ModelLoader.readModel$(ModelLoader.scala:77)
-    at org.nlogo.api.ConfigurableModelLoader.readModel(ModelLoader.scala:151)
-    at org.nlogo.fileformat.NLogoAnyLoader.readModel$$anonfun$2(NLogoAnyLoader.scala:29)
-    at scala.Option.map(Option.scala:242)
-    at org.nlogo.fileformat.NLogoAnyLoader.bruteForce(NLogoAnyLoader.scala:24)
-    at org.nlogo.fileformat.NLogoAnyLoader.readModel(NLogoAnyLoader.scala:29)
-    at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:529)
-    at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:517)
-    at netLogoLink.NetLogoLink.loadModel(NetLogoLink.java:132)
-Caused by: java.lang.ClassNotFoundException: org.nlogo.core.Switch$
-    at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-    at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-    ... 34 more
-
-Traceback (most recent call last):
-Process ForkPoolWorker-281:
-  File "ClassLoader.java", line 490, in java.lang.ClassLoader.loadClass
-java.lang.java.lang.ClassNotFoundException: java.lang.ClassNotFoundException: org.nlogo.fileformat.AbstractNLogoFormat$CodeComponent$
-Traceback (most recent call last):
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "ClassLoader.java", line 490, in java.lang.ClassLoader.loadClass
-java.lang.java.lang.ClassNotFoundException: java.lang.ClassNotFoundException: org.nlogo.core.Switch$
-  File "NetLogoLink.java", line 132, in netLogoLink.NetLogoLink.loadModel
-Exception: Java Exception
-
-The above exception was the direct cause of the following exception:
+<div id="1d584742" class="cell" data-execution_count="54">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>results.head(<span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="50">
+<div>
 
 
-The above exception was the direct cause of the following exception:
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Avg. sheep</th>
+<th data-quarto-table-cell-role="th">Avg. wolves</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>180.455446</td>
+<td>62.386139</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>208.336634</td>
+<td>50.861386</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>208.237624</td>
+<td>59.564356</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>167.475248</td>
+<td>40.495050</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>132.247525</td>
+<td>81.089109</td>
+</tr>
+</tbody>
+</table>
 
-Traceback (most recent call last):
-Traceback (most recent call last):
-  File "NetLogoLink.java", line 132, in netLogoLink.NetLogoLink.loadModel
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 246, in load_model
-    self.link.loadModel(path)
-    ~~~~~~~~~~~~~~~~~~~^^^^^^
-Exception: Java Exception
-java.lang.java.lang.NoClassDefFoundError: java.lang.NoClassDefFoundError: org/nlogo/fileformat/AbstractNLogoFormat$CodeComponent$
-
-The above exception was the direct cause of the following exception:
-
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-Traceback (most recent call last):
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 246, in load_model
-    self.link.loadModel(path)
-    ~~~~~~~~~~~~~~~~~~~^^^^^^
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
-    self.run()
-    ~~~~~~~~^^
-java.lang.java.lang.NoClassDefFoundError: java.lang.NoClassDefFoundError: org/nlogo/core/Switch$
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-During handling of the above exception, another exception occurred:
-
-  File "/usr/lib/python3.13/multiprocessing/pool.py", line 109, in worker
-    initializer(*initargs)
-    ~~~~~~~~~~~^^^^^^^^^^^
-  File "/tmp/ipykernel_4583/225911425.py", line 21, in initializer
-    netlogo.load_model(modelfile)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-Traceback (most recent call last):
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 249, in load_model
-    raise NetLogoException(str(ex))
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
-    self.run()
-    ~~~~~~~~^^
-pynetlogo.core.NetLogoException: java.lang.NoClassDefFoundError: org/nlogo/fileformat/AbstractNLogoFormat$CodeComponent$
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.13/multiprocessing/pool.py", line 109, in worker
-    initializer(*initargs)
-    ~~~~~~~~~~~^^^^^^^^^^^
-  File "/tmp/ipykernel_4583/225911425.py", line 21, in initializer
-    netlogo.load_model(modelfile)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 249, in load_model
-    raise NetLogoException(str(ex))
-pynetlogo.core.NetLogoException: java.lang.NoClassDefFoundError: org/nlogo/core/Switch$</code></pre>
 </div>
 </div>
-</div>
-<div id="2ae13ba3" class="cell" data-execution_count="51">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    modelfile <span class="op">=</span> os.path.abspath(<span class="st">"./nlogox/Wolf Sheep Predation_v6.nlogox"</span>)</span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    problem <span class="op">=</span> {</span>
-<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"num_vars"</span>: <span class="dv">6</span>,</span>
-<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"names"</span>: [</span>
-<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"random-seed"</span>,</span>
-<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"grass-regrowth-time"</span>,</span>
-<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sheep-gain-from-food"</span>,</span>
-<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"wolf-gain-from-food"</span>,</span>
-<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sheep-reproduce"</span>,</span>
-<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"wolf-reproduce"</span>,</span>
-<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>        ],</span>
-<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"bounds"</span>: [[<span class="dv">1</span>, <span class="dv">100000</span>], [<span class="fl">20.0</span>, <span class="fl">40.0</span>], [<span class="fl">2.0</span>, <span class="fl">8.0</span>], [<span class="fl">16.0</span>, <span class="fl">32.0</span>], [<span class="fl">2.0</span>, <span class="fl">8.0</span>], [<span class="fl">2.0</span>, <span class="fl">8.0</span>]],</span>
-<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="dv">1024</span></span>
-<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>    param_values <span class="op">=</span> sobolsample.sample(problem, n, calc_second_order<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># cast the param_values to a dataframe to</span></span>
-<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># include the column labels</span></span>
-<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>    experiments <span class="op">=</span> pd.DataFrame(param_values, columns<span class="op">=</span>problem[<span class="st">"names"</span>])</span>
-<span id="cb59-23"><a href="#cb59-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-24"><a href="#cb59-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(<span class="dv">4</span>, initializer<span class="op">=</span>initializer, initargs<span class="op">=</span>(modelfile,)) <span class="im">as</span> executor:</span>
-<span id="cb59-25"><a href="#cb59-25" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> []</span>
-<span id="cb59-26"><a href="#cb59-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> entry <span class="kw">in</span> executor.<span class="bu">map</span>(run_simulation, experiments.to_dict(<span class="st">"records"</span>)):</span>
-<span id="cb59-27"><a href="#cb59-27" aria-hidden="true" tabindex="-1"></a>            results.append(entry)</span>
-<span id="cb59-28"><a href="#cb59-28" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> pd.DataFrame(results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
+</section>
+<section id="session-info" class="level2">
+<h2 class="anchored" data-anchor-id="session-info">Session Info</h2>
+<div id="cell-session-info" class="cell" data-execution_count="55">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> session_info</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>session_info.show(cpu <span class="op">=</span> <span class="va">True</span>, jupyter <span class="op">=</span> <span class="va">True</span>, dependencies <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="session-info" class="cell-output cell-output-display" data-execution_count="51">
+<details>
+<summary>Click to view session information</summary>
+<pre>-----
+SALib               NA
+ipyparallel         9.0.1
+matplotlib          3.10.6
+mpl_toolkits        NA
+numpy               2.3.3
+pandas              2.3.2
+pynetlogo           0.5.2
+scipy               1.16.2
+seaborn             0.13.2
+session_info        v1.0.1
+-----
+</pre>
+<details>
+<summary>Click to view modules imported as dependencies</summary>
+<pre>PIL                 11.3.0
+asttokens           NA
+comm                0.2.3
+cycler              0.12.1
+cython_runtime      NA
+dateutil            2.9.0.post0
+debugpy             1.8.17
+decorator           5.2.1
+dill                0.4.0
+et_xmlfile          2.0.0
+executing           2.2.1
+ipykernel           6.30.1
+jedi                0.19.2
+jpype               1.6.0
+kiwisolver          1.4.9
+matplotlib_inline   0.1.7
+multiprocess        0.70.18
+netLogoLink         NA
+openpyxl            3.1.5
+packaging           25.0
+parso               0.8.5
+platformdirs        4.4.0
+prompt_toolkit      3.0.52
+psutil              7.1.0
+pure_eval           0.2.3
+pydev_ipython       NA
+pydevconsole        NA
+pydevd              3.2.3
+pydevd_file_utils   NA
+pydevd_plugins      NA
+pydevd_tracing      NA
+pygments            2.19.2
+pyparsing           3.2.5
+pytz                2025.2
+six                 1.17.0
+stack_data          0.6.3
+tornado             6.5.2
+tqdm                4.67.1
+traitlets           5.14.3
+wcwidth             0.2.14
+zmq                 27.1.0
+</pre>
+</details> <!-- seems like this ends pre, so might as well be explicit -->
+<pre>-----
+IPython             9.5.0
+jupyter_client      8.6.3
+jupyter_core        5.8.1
+-----
+Python 3.13.7 (main, Aug 15 2025, 12:34:02) [GCC 15.2.1 20250813]
+Linux-6.16.8-arch1-1-x86_64-with-glibc2.42
+12 logical CPU cores
+-----
+Session information updated at 2025-09-27 00:23
+</pre>
+</details>
+</div>
+</div>
 </section>
 <section id="license" class="level2">
 <h2 class="anchored" data-anchor-id="license">License</h2>

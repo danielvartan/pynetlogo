@@ -28,6 +28,7 @@ pip install nbformat
 pip install openpyxl
 pip install pyyaml
 pip install SALib
+pip install session_info
 pip install sobol
 ```
 
@@ -46,6 +47,8 @@ See the this example at: <https://pynetlogo.readthedocs.io/en/latest/_docs/intro
 :::
 
 ```{python}
+#| label: example-1-first-block
+
 %matplotlib inline
 
 import pandas as pd
@@ -246,13 +249,9 @@ netlogo.kill_workspace()
 See the this example at: <https://pynetlogo.readthedocs.io/en/latest/_docs/SALib_ipyparallel.html>
 :::
 
-::: {.callout-important}
-I encountered an error running the code below and was unable to complete execution.
-
-The error is indicated within the pipeline.
-:::
-
 ```{python}
+#| label: example-2-first-block
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -292,7 +291,7 @@ problem = {
 ```
 
 ```{python}
-n = 1024
+n = 2 ** 5  # Changed
 param_values = sobolsample.sample(problem, n, calc_second_order=True)
 ```
 
@@ -303,8 +302,6 @@ param_values.shape
 ### Running the Experiments in Parallel Using `ipyparallel`
 
 ```{python}
-#| eval: false
-
 import ipyparallel as ipp
 
 cluster = ipp.Cluster(n=4)
@@ -312,21 +309,16 @@ cluster.start_cluster_sync();
 ```
 
 ```{python}
-#| eval: false
-
 rc = cluster.connect_client_sync()
+rc.wait_for_engines(n=4) # Added
 rc.ids
 ```
 
 ```{python}
-#| eval: false
-
 direct_view = rc[:]
 ```
 
 ```{python}
-#| eval: false
-
 import os
 
 # Push the current working directory of the notebook to a "cwd" variable on the engines that can be accessed later
@@ -334,20 +326,17 @@ direct_view.push(dict(cwd=os.getcwd()), block=True)
 ```
 
 ```{python}
-#| eval: false
-
 # Push the "problem" variable from the notebook to a corresponding variable on the engines
 direct_view.push(dict(problem=problem), block=True)
 ```
 
 ```{python}
-#| eval: false
-
 %%px
 import os
 os.chdir(cwd)
 
 import pynetlogo
+import numpy as np
 import pandas as pd
 
 netlogo = pynetlogo.NetLogoLink(
@@ -360,10 +349,7 @@ netlogo.load_model("./nlogox/Wolf Sheep Predation_v6.nlogox")
 ```
 
 ```{python}
-#| eval: false
-
 def simulation(experiment):
-
     # Set the input parameters
     for i, name in enumerate(problem["names"]):
         if name == "random-seed":
@@ -377,54 +363,42 @@ def simulation(experiment):
     # Run for 100 ticks and return the number of sheep and wolf agents at each time step
     counts = netlogo.repeat_report(["count sheep", "count wolves"], 100)
 
-    results = pd.Series(
-        [counts["count sheep"].values.mean(), counts["count wolves"].values.mean()],
+    results = pd.Series( # Added
+        [np.mean(counts["count sheep"]), np.mean(counts["count wolves"])],
         index=["Avg. sheep", "Avg. wolves"],
     )
+
+    # Original code:
+    #
+    # results = pd.Series(
+    #     [counts["count sheep"].values.mean(), counts["count wolves"].values.mean()],
+    #     index=["Avg. sheep", "Avg. wolves"],
+    # )
 
     return results
 ```
 
-::: {.callout-important}
-I encountered an error running the code below and was unable to complete execution.
-
-The remaining code cells in this section  (Example 2) will not be evaluated due to this issue.
-
+```{python}
+lview = rc.load_balanced_view()
 ```
-CompositeError: one or more exceptions raised in: simulation
-[3:apply]AttributeError: 'numpy.ndarray' object has no attribute 'values'
-[1:apply]AttributeError: 'numpy.ndarray' object has no attribute 'values'
-[0:apply]AttributeError: 'numpy.ndarray' object has no attribute 'values'
-[2:apply]AttributeError: 'numpy.ndarray' object has no attribute 'values'
-.... 14332 more exceptions ...
-```
-:::
 
 ```{python}
-#| eval: false
-
-lview = rc.load_balanced_view()
+#| label: example-2-main-run
 
 results = pd.DataFrame(lview.map_sync(simulation, param_values))
 ```
 
 ```{python}
-#| eval: false
-
 results.to_csv("./data/Sobol_parallel.csv")
 ```
 
 ```{python}
-#| eval: false
-
 results.head(5)
 ```
 
 ### Using `SALib` for Sensitivity Analysis
 
 ```{python}
-#| eval: false
-
 fig, ax = plt.subplots(1, len(results.columns), sharey=True)
 
 for i, n in enumerate(results.columns):
@@ -439,8 +413,6 @@ plt.show()
 ```
 
 ```{python}
-#| eval: false
-
 import scipy
 
 nrow = 2
@@ -479,8 +451,6 @@ plt.show()
 ```
 
 ```{python}
-#| eval: false
-
 Si = sobol.analyze(
     problem,
     results["Avg. sheep"].values,
@@ -490,21 +460,15 @@ Si = sobol.analyze(
 ```
 
 ```{python}
-#| eval: false
-
 Si_filter = {k: Si[k] for k in ["ST", "ST_conf", "S1", "S1_conf"]}
 Si_df = pd.DataFrame(Si_filter, index=problem["names"])
 ```
 
 ```{python}
-#| eval: false
-
 Si_df
 ```
 
 ```{python}
-#| eval: false
-
 fig, ax = plt.subplots(1)
 
 indices = Si_df[["S1", "ST"]]
@@ -517,8 +481,6 @@ plt.show()
 ```
 
 ```{python}
-#| eval: false
-
 %matplotlib inline
 import itertools
 from math import pi
@@ -526,15 +488,11 @@ from matplotlib.legend_handler import HandlerPatch
 ```
 
 ```{python}
-#| eval: false
-
 def normalize(x, xmin, xmax):
     return (x - xmin) / (xmax - xmin)
 ```
 
 ```{python}
-#| eval: false
-
 def plot_circles(ax, locs, names, max_s, stats, smax, smin, fc, ec, lw, zorder):
     s = np.asarray([stats[name] for name in names])
     s = 0.01 + max_s * np.sqrt(normalize(s, smin, smax))
@@ -563,8 +521,6 @@ def plot_circles(ax, locs, names, max_s, stats, smax, smin, fc, ec, lw, zorder):
 ```
 
 ```{python}
-#| eval: false
-
 def filter(sobol_indices, names, locs, criterion, threshold):
     if criterion in ["ST", "S1", "S2"]:
         data = sobol_indices[criterion]
@@ -583,8 +539,6 @@ def filter(sobol_indices, names, locs, criterion, threshold):
 ```
 
 ```{python}
-#| eval: false
-
 def plot_sobol_indices(sobol_indices, criterion="ST", threshold=0.01):
     """plot sobol indices on a radial plot
 
@@ -680,8 +634,6 @@ def plot_sobol_indices(sobol_indices, criterion="ST", threshold=0.01):
 ```
 
 ```{python}
-#| eval: false
-
 class HandlerCircle(HandlerPatch):
     def create_artists(
         self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans
@@ -694,8 +646,6 @@ class HandlerCircle(HandlerPatch):
 ```
 
 ```{python}
-#| eval: false
-
 def legend(ax):
     some_identifiers = [
         plt.Circle((0, 0), radius=5, color="k", fill=False, lw=1),
@@ -713,8 +663,6 @@ def legend(ax):
 ```
 
 ```{python}
-#| eval: false
-
 sns.set_style("whitegrid")
 fig = plot_sobol_indices(Si, criterion="ST", threshold=0.005)
 fig.set_size_inches(7, 7)
@@ -727,20 +675,16 @@ plt.show()
 See the this example at: <https://pynetlogo.readthedocs.io/en/latest/_docs/SALib_multiprocessing.html>
 :::
 
-::: {.callout-important}
-I encountered an error running the code below and was unable to complete execution.
-
-The error is indicated within the pipeline.
-:::
-
 ### Running the Experiments in Parallel Using a Process Pool
 
 ```{python}
+#| label: example-3-first-block
 #| eval: false
 
 from multiprocessing import Pool
 import os
 import pandas as pd
+import numpy as np
 
 import pynetlogo
 
@@ -799,260 +743,20 @@ def run_simulation(experiment):
     # wolf agents at each time step
     counts = netlogo.repeat_report(["count sheep", "count wolves"], 100)
 
-    results = pd.Series(
-        [counts["count sheep"].values.mean(), counts["count wolves"].values.mean()],
+    results = pd.Series( # Added
+        [np.mean(counts["count sheep"]), np.mean(counts["count wolves"])],
         index=["Avg. sheep", "Avg. wolves"],
     )
+
+    # Original code:
+    #
+    # results = pd.Series(
+    #     [counts["count sheep"].values.mean(), counts["count wolves"].values.mean()],
+    #     index=["Avg. sheep", "Avg. wolves"],
+    # )
+
     return results
 ```
-
-::: {.callout-important}
-I encountered an error running the code below and was unable to complete execution.
-
-The remaining code cells in this section  (Example 3) will not be evaluated due to this issue.
-
-```
-java.lang.ClassNotFoundException: org.nlogo.sdm.NLogoThreeDSDMFormat
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-	at java.base/java.lang.Class.forName0(Native Method)
-	at java.base/java.lang.Class.forName(Class.java:467)
-	at java.base/java.lang.Class.forName(Class.java:458)
-	at org.nlogo.core.Femto$.get(Femto.scala:10)
-	at org.nlogo.headless.HeadlessWorkspace.loader$lzyINIT1(HeadlessWorkspace.scala:504)
-	at org.nlogo.headless.HeadlessWorkspace.loader(HeadlessWorkspace.scala:499)
-	at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:529)
-	at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:517)
-	at netLogoLink.NetLogoLink.loadModel(NetLogoLink.java:132)
-
-Process ForkPoolWorker-284:
-Traceback (most recent call last):
-  File "NetLogoLink.java", line 132, in netLogoLink.NetLogoLink.loadModel
-Exception: Java Exception
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-java.lang.NoClassDefFoundError: org/nlogo/api/FormatterPair
-	at org.nlogo.api.ConfigurableModelLoader.addFormat(ModelLoader.scala:155)
-	at org.nlogo.fileformat.FileFormat$.standardLoader(FileFormat.scala:50)
-	at org.nlogo.fileformat.FileFormat$.standardAnyLoader(FileFormat.scala:65)
-	at org.nlogo.headless.HeadlessWorkspace.loader$lzyINIT1(HeadlessWorkspace.scala:500)
-	at org.nlogo.headless.HeadlessWorkspace.loader(HeadlessWorkspace.scala:499)
-	at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:529)
-	at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:517)
-	at netLogoLink.NetLogoLink.loadModel(NetLogoLink.java:132)
-Caused by: java.lang.ClassNotFoundException: org.nlogo.api.FormatterPair
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-	... 8 more
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 246, in load_model
-    self.link.loadModel(path)
-    ~~~~~~~~~~~~~~~~~~~^^^^^^
-
-java.lang.java.lang.ClassNotFoundException: java.lang.ClassNotFoundException: org.nlogo.sdm.NLogoThreeDSDMFormat
-
-During handling of the above exception, another exception occurred:
-
-Process ForkPoolWorker-283:
-Traceback (most recent call last):
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
-    self.run()
-    ~~~~~~~~^^
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Traceback (most recent call last):
-  File "/usr/lib/python3.13/multiprocessing/pool.py", line 109, in worker
-    initializer(*initargs)
-    ~~~~~~~~~~~^^^^^^^^^^^
-  File "ClassLoader.java", line 490, in java.lang.ClassLoader.loadClass
-  File "/tmp/ipykernel_4583/225911425.py", line 21, in initializer
-    netlogo.load_model(modelfile)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-java.lang.java.lang.ClassNotFoundException: java.lang.ClassNotFoundException: org.nlogo.api.FormatterPair
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 249, in load_model
-    raise NetLogoException(str(ex))
-pynetlogo.core.NetLogoException: java.lang.ClassNotFoundException: org.nlogo.sdm.NLogoThreeDSDMFormat
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "NetLogoLink.java", line 132, in netLogoLink.NetLogoLink.loadModel
-Exception: Java Exception
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 246, in load_model
-    self.link.loadModel(path)
-    ~~~~~~~~~~~~~~~~~~~^^^^^^
-java.lang.java.lang.NoClassDefFoundError: java.lang.NoClassDefFoundError: org/nlogo/api/FormatterPair
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
-    self.run()
-    ~~~~~~~~^^
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.13/multiprocessing/pool.py", line 109, in worker
-    initializer(*initargs)
-    ~~~~~~~~~~~^^^^^^^^^^^
-  File "/tmp/ipykernel_4583/225911425.py", line 21, in initializer
-    netlogo.load_model(modelfile)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 249, in load_model
-    raise NetLogoException(str(ex))
-pynetlogo.core.NetLogoException: java.lang.NoClassDefFoundError: org/nlogo/api/FormatterPair
-java.lang.NoClassDefFoundError: org/nlogo/fileformat/AbstractNLogoFormat$CodeComponent$
-	at org.nlogo.fileformat.NLogoFormat.CodeComponent$lzyINIT1(NLogoFormat.scala:19)
-	at org.nlogo.fileformat.NLogoFormat.CodeComponent(NLogoFormat.scala:19)
-	at org.nlogo.fileformat.AbstractNLogoFormat.codeComponent(NLogoFormat.scala:261)
-	at org.nlogo.fileformat.AbstractNLogoFormat.codeComponent$(NLogoFormat.scala:47)
-	at org.nlogo.fileformat.NLogoFormat.codeComponent(NLogoFormat.scala:17)
-	at org.nlogo.api.ModelFormat.defaultComponents(ModelFormat.scala:41)
-	at org.nlogo.api.ModelFormat.defaultComponents$(ModelFormat.scala:20)
-	at org.nlogo.fileformat.NLogoFormat.defaultComponents(NLogoFormat.scala:17)
-	at org.nlogo.api.ModelFormat.load$$anonfun$2(ModelFormat.scala:58)
-	at scala.util.Success.flatMap(Try.scala:266)
-	at org.nlogo.api.ModelFormat.load(ModelFormat.scala:57)
-	at org.nlogo.api.ModelFormat.load$(ModelFormat.scala:20)
-	at org.nlogo.fileformat.NLogoFormat.load(NLogoFormat.scala:17)
-	at org.nlogo.api.FormatterPair.load(ModelLoader.scala:55)
-	at org.nlogo.api.ModelLoader.readModel(ModelLoader.scala:91)
-	at org.nlogo.api.ModelLoader.readModel$(ModelLoader.scala:77)
-	at org.nlogo.api.ConfigurableModelLoader.readModel(ModelLoader.scala:151)
-	at org.nlogo.fileformat.NLogoAnyLoader.readModel$$anonfun$2(NLogoAnyLoader.scala:29)
-	at scala.Option.map(Option.scala:242)
-	at org.nlogo.fileformat.NLogoAnyLoader.bruteForce(NLogoAnyLoader.scala:24)
-	at org.nlogo.fileformat.NLogoAnyLoader.readModel(NLogoAnyLoader.scala:29)
-	at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:529)
-	at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:517)
-	at netLogoLink.NetLogoLink.loadModel(NetLogoLink.java:132)
-Caused by: java.lang.ClassNotFoundException: org.nlogo.fileformat.AbstractNLogoFormat$CodeComponent$
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-	... 24 more
-
-Process ForkPoolWorker-285:
-java.lang.NoClassDefFoundError: org/nlogo/core/Switch$
-	at org.nlogo.core.model.SwitchReader$.asWidget(WidgetReader.scala:416)
-	at org.nlogo.core.model.SwitchReader$.asWidget(WidgetReader.scala:412)
-	at org.nlogo.core.model.BaseWidgetReader.parse(WidgetReader.scala:182)
-	at org.nlogo.core.model.WidgetReader$.read(WidgetReader.scala:125)
-	at org.nlogo.fileformat.AbstractNLogoFormat$InterfaceComponent$.$anonfun$5(NLogoFormat.scala:226)
-	at scala.collection.immutable.List.map(List.scala:251)
-	at org.nlogo.fileformat.AbstractNLogoFormat$InterfaceComponent$.deserialize$$anonfun$4$$anonfun$1(NLogoFormat.scala:226)
-	at scala.util.Try$.apply(Try.scala:217)
-	at org.nlogo.fileformat.AbstractNLogoFormat$InterfaceComponent$.deserialize$$anonfun$4(NLogoFormat.scala:227)
-	at scala.util.Success.flatMap(Try.scala:266)
-	at org.nlogo.api.ModelFormat.addModelSection(ModelFormat.scala:91)
-	at org.nlogo.api.ModelFormat.constructModel$$anonfun$2(ModelFormat.scala:63)
-	at scala.collection.LinearSeqOps.foldLeft(LinearSeq.scala:183)
-	at scala.collection.LinearSeqOps.foldLeft$(LinearSeq.scala:179)
-	at scala.collection.immutable.List.foldLeft(List.scala:79)
-	at org.nlogo.api.ModelFormat.constructModel(ModelFormat.scala:63)
-	at org.nlogo.api.ModelFormat.constructModel$(ModelFormat.scala:20)
-	at org.nlogo.fileformat.NLogoFormat.constructModel(NLogoFormat.scala:17)
-	at org.nlogo.api.ModelFormat.load$$anonfun$2(ModelFormat.scala:58)
-	at scala.util.Success.flatMap(Try.scala:266)
-	at org.nlogo.api.ModelFormat.load(ModelFormat.scala:57)
-	at org.nlogo.api.ModelFormat.load$(ModelFormat.scala:20)
-	at org.nlogo.fileformat.NLogoFormat.load(NLogoFormat.scala:17)
-	at org.nlogo.api.FormatterPair.load(ModelLoader.scala:55)
-	at org.nlogo.api.ModelLoader.readModel(ModelLoader.scala:91)
-	at org.nlogo.api.ModelLoader.readModel$(ModelLoader.scala:77)
-	at org.nlogo.api.ConfigurableModelLoader.readModel(ModelLoader.scala:151)
-	at org.nlogo.fileformat.NLogoAnyLoader.readModel$$anonfun$2(NLogoAnyLoader.scala:29)
-	at scala.Option.map(Option.scala:242)
-	at org.nlogo.fileformat.NLogoAnyLoader.bruteForce(NLogoAnyLoader.scala:24)
-	at org.nlogo.fileformat.NLogoAnyLoader.readModel(NLogoAnyLoader.scala:29)
-	at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:529)
-	at org.nlogo.headless.HeadlessWorkspace.open(HeadlessWorkspace.scala:517)
-	at netLogoLink.NetLogoLink.loadModel(NetLogoLink.java:132)
-Caused by: java.lang.ClassNotFoundException: org.nlogo.core.Switch$
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
-	... 34 more
-
-Traceback (most recent call last):
-Process ForkPoolWorker-281:
-  File "ClassLoader.java", line 490, in java.lang.ClassLoader.loadClass
-java.lang.java.lang.ClassNotFoundException: java.lang.ClassNotFoundException: org.nlogo.fileformat.AbstractNLogoFormat$CodeComponent$
-Traceback (most recent call last):
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "ClassLoader.java", line 490, in java.lang.ClassLoader.loadClass
-java.lang.java.lang.ClassNotFoundException: java.lang.ClassNotFoundException: org.nlogo.core.Switch$
-  File "NetLogoLink.java", line 132, in netLogoLink.NetLogoLink.loadModel
-Exception: Java Exception
-
-The above exception was the direct cause of the following exception:
-
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-Traceback (most recent call last):
-  File "NetLogoLink.java", line 132, in netLogoLink.NetLogoLink.loadModel
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 246, in load_model
-    self.link.loadModel(path)
-    ~~~~~~~~~~~~~~~~~~~^^^^^^
-Exception: Java Exception
-java.lang.java.lang.NoClassDefFoundError: java.lang.NoClassDefFoundError: org/nlogo/fileformat/AbstractNLogoFormat$CodeComponent$
-
-The above exception was the direct cause of the following exception:
-
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-Traceback (most recent call last):
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 246, in load_model
-    self.link.loadModel(path)
-    ~~~~~~~~~~~~~~~~~~~^^^^^^
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
-    self.run()
-    ~~~~~~~~^^
-java.lang.java.lang.NoClassDefFoundError: java.lang.NoClassDefFoundError: org/nlogo/core/Switch$
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-During handling of the above exception, another exception occurred:
-
-  File "/usr/lib/python3.13/multiprocessing/pool.py", line 109, in worker
-    initializer(*initargs)
-    ~~~~~~~~~~~^^^^^^^^^^^
-  File "/tmp/ipykernel_4583/225911425.py", line 21, in initializer
-    netlogo.load_model(modelfile)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-Traceback (most recent call last):
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 249, in load_model
-    raise NetLogoException(str(ex))
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
-    self.run()
-    ~~~~~~~~^^
-pynetlogo.core.NetLogoException: java.lang.NoClassDefFoundError: org/nlogo/fileformat/AbstractNLogoFormat$CodeComponent$
-  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
-    self._target(*self._args, **self._kwargs)
-    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.13/multiprocessing/pool.py", line 109, in worker
-    initializer(*initargs)
-    ~~~~~~~~~~~^^^^^^^^^^^
-  File "/tmp/ipykernel_4583/225911425.py", line 21, in initializer
-    netlogo.load_model(modelfile)
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
-  File "/home/danielvartan/Git/pynetlogo/.venv/lib/python3.13/site-packages/pynetlogo/core.py", line 249, in load_model
-    raise NetLogoException(str(ex))
-pynetlogo.core.NetLogoException: java.lang.NoClassDefFoundError: org/nlogo/core/Switch$
-```
-:::
 
 ```{python}
 #| eval: false
@@ -1073,7 +777,7 @@ if __name__ == "__main__":
         "bounds": [[1, 100000], [20.0, 40.0], [2.0, 8.0], [16.0, 32.0], [2.0, 8.0], [2.0, 8.0]],
     }
 
-    n = 1024
+    n = 2 ** 1 # Changed
     param_values = sobolsample.sample(problem, n, calc_second_order=True)
 
     # cast the param_values to a dataframe to
@@ -1085,6 +789,34 @@ if __name__ == "__main__":
         for entry in executor.map(run_simulation, experiments.to_dict("records")):
             results.append(entry)
         results = pd.DataFrame(results)
+```
+
+```{python}
+#| label: example-3-main-run
+#| include: false
+
+import subprocess
+import pandas as pd
+
+venv_python = os.path.abspath(".venv/bin/python")
+
+subprocess.run([venv_python, "./py/example-3.py"], check=True)
+
+results = pd.read_csv("./data/example-3-results.csv")
+```
+
+```{python}
+results.head(5)
+```
+
+## Session Info
+
+```{python}
+#| label: session-info
+
+import session_info
+
+session_info.show(cpu = True, jupyter = True, dependencies = True)
 ```
 
 ## License
